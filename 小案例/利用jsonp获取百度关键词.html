@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>jsonp</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.wrapper{
+				display: block;
+				margin: 50px auto;
+			}
+			#search{
+				width: 430px;
+				height: 45px;
+				padding-left: 5px;
+				border: 1px solid #CCCCCC;
+				box-sizing: border-box;
+			}
+			.List{
+				width: 430px;
+				border: 1px solid #CCCCCC;
+				box-sizing: border-box;
+				padding: 10px;
+				display: none;
+			}
+			.List li{
+				width: 100%;
+				float: left;
+				text-align: left;
+			}
+			.List li:hover{
+				background: #999999;
+			}
+			a{
+				color: #888888;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<center>
+				<input type="text" id="search"/>
+				<ul class="List">
+					<div style="clear: both;"></div>
+				</ul>
+			</center>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var oList = document.getElementsByClassName("List")[0];
+		search.oninput = function() {
+			var value = this.value;
+			var oScript = document.createElement("script");
+			oScript.src = 'https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&sugsid=1465,21127,29568,29220,26350&wd= '+ value +'&pwd=a&cb=doJson';
+			document.body.appendChild(oScript);
+			document.body.removeChild(oScript);
+		}
+		
+		function doJson(data){
+			var set = data.g,
+			str = ""
+			if(data.g){
+				set.forEach(function(ele, index) {
+					str += '<li><a href='+ "https://www.baidu.com/s?wd="+ ele.q +"" +'>'+ ele.q +'</a></li><div style="clear: both;"></div>'
+				})
+				oList.innerHTML = str;
+				oList.style.display = "block"
+			}else{
+				oList.style.display = "none"
+			}
+		}
+		// 天气接口
+		// http://wthrcdn.etouch.cn/weather_mini?city=哈尔滨&callback=ds
+		// 
+		// city:城市
+		// callback:回调函数名称
+		// 
+		// 
+		// 部分jsonp接口：
+		// https://www.bejson.com/knownjson/webInterface/
+
+	</script>
+</html>

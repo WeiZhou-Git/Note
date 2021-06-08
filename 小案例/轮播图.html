@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.wrapper{
+				position: relative;
+				width: 400px;
+				height: 300px;
+				margin: 100px auto;
+				overflow: hidden;
+			}
+			.sliderpage{
+				position: absolute;
+				top: 0; left: 0;
+				width: 2000px;
+				height: 300px;
+			}
+			.sliderpage li{
+				width: 400px;
+				height: 300px;
+				float: left;
+			}
+			img{
+				width: 100%;
+				height: 100%;
+			}
+			.wrapper .btn{
+				width: 40px;
+				height: 40px;
+				color: white;
+				background-color: #000;
+				text-align: center;
+				line-height: 40px;
+				position: absolute;
+				opacity: 0.2;
+				border: none;
+				transition: .5s;
+				cursor: pointer;
+			}
+			.wrapper:hover .btn{
+				opacity: .8;
+			}
+			.leftBtn{
+				left: 5px;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			.rightBth{
+				right: 5px;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			.wrapper .sliderIndex{
+				position: absolute;
+				bottom: 5px;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+			.wrapper .sliderIndex span{
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				background-color: #ccc;
+				border-radius: 50%;
+				margin-left: 10px;
+			    cursor: pointer;
+			}
+			.wrapper .sliderIndex .active{
+				background-color: #FF0000;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="sliderpage">
+				<li>
+					<img src="../image/1.jpg" >
+				</li>
+				<li>
+					<img src="../image/2.jpg" >
+				</li>
+				<li>
+					<img src="../image/3.jpg" >
+				</li>
+				<li>
+					<img src="../image/4.jpg" >
+				</li>
+				<li>
+					<img src="../image/1.jpg" >
+				</li>
+			</div>
+			<button class="btn leftBtn"><</button>
+			<button class="btn rightBth">></button>
+			<div class="sliderIndex">
+				<span class="active"></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var timer = null, key = true, index = 0;
+		var sliderIndex = document.getElementsByClassName("sliderIndex")[0].getElementsByTagName("span");
+		var sliderPage = document.getElementsByClassName("sliderpage")[0];
+		var oRightBtn = document.getElementsByClassName("rightBth")[0];
+		var oLeftBtn = document.getElementsByClassName("leftBtn")[0];
+		var moveWidth = sliderPage.children[0].offsetWidth;
+		var listLen = sliderPage.children.length - 1;
+		oRightBtn.onclick = function(){
+			autoMove("left->right");
+		}
+		oLeftBtn.onclick = function(){
+			autoMove("right->left")
+		}
+		for(var i = 0; i < sliderIndex.length; i++){
+			(function(funIndex){
+				sliderIndex[i].onclick = function(){
+					key = false;
+					clearTimeout(timer);
+					index = funIndex;
+					allObjStartMove(sliderPage, {left : - funIndex * moveWidth}, function(){
+						key  = true;
+						timer = setTimeout(timer)
+						chengeIndex(index)
+					})
+				}
+			}(i))
+		}
+		function autoMove(direction){
+			if(key){
+				key = false;
+				clearTimeout(timer);
+				// direction == "left->right"  ||  direction == "right->left"
+				if(!direction || direction == "left->right"){
+					index ++;
+					allObjStartMove(sliderPage, {left : sliderPage.offsetLeft - moveWidth}, function(){
+						if(sliderPage.offsetLeft == -listLen * moveWidth){
+							// allObjStartMove(sliderPage, {left : 0})
+							sliderPage.style.left = "0px";
+							index = 0;
+						}
+						timer = setTimeout(autoMove ,1500)
+						key = true;
+						chengeIndex(index)
+					}) 
+				}else if(direction == "right->left"){
+					if(sliderPage.offsetLeft == 0){
+						sliderPage.style.left = - (listLen * moveWidth) + "px";
+						index = listLen;
+					}
+					index --;
+					allObjStartMove(sliderPage, {left : sliderPage.offsetLeft + moveWidth},function(){
+						timer = setTimeout(autoMove ,1500)
+						key = true;
+						chengeIndex(index)
+					});
+						
+				}
+			}
+		}
+		function chengeIndex(index){
+			for(var i = 0; i < sliderIndex.length; i++){
+				sliderIndex[i].className = ""
+			}
+			sliderIndex[index].className = "active";
+		}
+		var timer = setTimeout(autoMove ,1500)
+		//多物体多值链式运动框架
+		function allObjStartMove(obj, target, callBack){
+			clearInterval(obj.timer)
+			var iSpeed, iCur;
+			obj.timer = setInterval(function(){
+				var IcKey = true;
+				for(var attr in target){
+					if(attr == "opacity"){
+						iCur = parseFloat(getStyle(obj, attr)) * 100;
+					}else{
+						iCur = parseInt(getStyle(obj, attr));
+					}
+					iSpeed = (target[attr] - iCur) / 7;
+					iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+					if(attr == "opacity"){
+						obj.style[attr] = (iCur + iSpeed) / 100;
+					}else{
+						obj.style[attr] = iCur + iSpeed + "px";
+					}
+					if(iCur != target[attr]){
+						IcKey = false;
+					}
+				}
+				if(IcKey){
+					clearInterval(obj.timer)
+					typeof callBack == "function" ? callBack() : "";
+				}
+			},30)
+		}
+		// 获取样式方法
+		function getStyle(elem, prop){
+			if(window.getComputedStyle){
+				return window.getComputedStyle(elem, null)[prop];
+			}else{
+				return elem.currentStyle[prop];
+			}
+		}
+	</script>
+</html>

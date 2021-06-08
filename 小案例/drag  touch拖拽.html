@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	</head>
+	<body>
+		<div style="background: red;width: 100px;height: 100px;position: absolute;left: 0;top: 0;"></div>
+	</body>
+	<script type="text/javascript">
+		// transform
+		// var oDiv = document.getElementsByTagName("div")[0];
+		// var stratX, stratY, moveX, moveY, distanceX, distanceY;
+		// var setTouchX = 0, setTouchY = 0;
+		// oDiv.addEventListener("touchstart", function(event) {
+		// 	var event = event || window.event;
+		// 	stratX = event.targetTouches[0].pageX;
+		// 	stratY = event.targetTouches[0].pageY;
+		// 	console.log(stratX, stratY)
+		// })
+		// oDiv.addEventListener("touchmove", function(event) {
+		// 	var event = event || window.event;
+		// 	moveX = event.targetTouches[0].pageX;
+		// 	moveY = event.targetTouches[0].pageY;
+		// 	distanceX = moveX - stratX;    //  移动坐标 - 第一次点击坐标
+		// 	distanceY = moveY - stratY;
+		// 	oDiv.style.transform = "translate("+ distanceX +"px, "+ distanceY +"px)";
+		// })
+		// oDiv.addEventListener("touchend", function(event) {
+		// 	console.log(1)
+		// })
+		//  利用  position
+		var oDiv = document.getElementsByTagName("div")[0];
+		var stratX, stratY, moveX, moveY, distanceX, distanceY;
+		oDiv.addEventListener("touchstart", function(event) {
+			console.log(event)
+			var event = event || window.event;
+			stratX = event.targetTouches[0].pageX - parseInt(oDiv.style.left);
+			stratY = event.targetTouches[0].pageY - parseInt(oDiv.style.top);
+			oDiv.addEventListener("touchmove", function(event) {
+				var event = event || window.event;
+				moveX = event.targetTouches[0].pageX;
+				moveY = event.targetTouches[0].pageY;
+				distanceX = moveX - stratX;
+				distanceY = moveY - stratY;
+				console.log(distanceX)
+				if(distanceX < 0){
+					distanceX = 0
+				}
+				if(distanceY < 0){
+					distanceY = 0
+				}
+				if(distanceX > window.innerWidth - 100){
+					distanceX = window.innerWidth - 100
+				}
+				
+				if(distanceY > window.innerHeight - 100){
+					distanceY = window.innerHeight - 100
+				}
+				oDiv.style.left = distanceX + "px";
+				oDiv.style.top = distanceY + "px";
+			})
+		})
+		oDiv.addEventListener("touchend", function(event) {
+			console.log(1)
+		})
+	</script>
+</html>

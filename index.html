@@ -1,0 +1,2666 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>移动</title>
+		<script src="js/myLibrary.js" type="text/javascript" charset="utf-8"></script>
+		<!-- <script src="js/jquery3.4.1.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/touch.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			.content {
+				width: 100px;
+				height: 100px;
+				background-color: red;
+			}
+			#tempCanvas{
+				border: 1px solid #000;
+				margin: 0 auto;
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- <input type="text"/> -->
+		<!-- <div id="div" style="width:200px; height:200px;
+							 padding:10px; 
+							 box-sizing:border-box;
+							 border:15px solid black;" ></div> -->
+		<!-- <img src="首页1.png" style="width: 100%;"> -->
+		<!-- <div class="only demo content" id="temp">1</div>
+		<div class="only demo content">1</div>
+		<div id="demo"><li></li></div>
+		<ul id="List"></ul> -->
+		<!-- <span class="only demo"></span>
+		<p class="centent"></p> -->
+		
+		<!-- <canvas id="tempCanvas" width="500" height="500"></canvas> -->
+	</body>
+	<script type="text/javascript">
+		
+		// 让 console.log  更加简单
+		var log = (a) => console.log(a)
+		
+		var wz = 'https://ke.qq.com/user/index/index.html#/plan/cid=231577&term_id=100273169'
+		
+		var reg = /(https)/
+		console.log(wz.match(reg))
+		
+		
+		var x = 1; 
+		if(function f() {}){
+			console.log(555)
+		}
+		console.log(x)
+		var a = function f(){}
+		// 继承  (圣杯模式)
+		// function inherit(Target, Origin){
+		// 	function F(){};
+		// 	F.prototype = Origin.prototype;
+		// 	Target.prototype = new F();
+		// 	Target.prototype.constructor = Target;
+		// 	Target.prototype.uber = Origin.prototype;  
+		// }
+		// var inherit = (function(){
+		// 	function F(){}
+		// 	return function(Target, Origin){
+		// 		F.prototype = Origin.prototype;
+		// 		Target.prototype = new F();
+		// 		Target.prototype.constructor = Target;
+		// 		Target.prototype.uber = Origin.prototype; 
+		// 	}
+		// }());
+		//-------------------------------------
+		// arguments 的属性
+		// arguments.callee 指向函数自身引用
+		// function  的属性
+		// func.caller  被那个函数调用  就指向该函数
+		// 例如:
+		// function demo(){
+		// 	test()
+		// }
+		// function test(){
+		// 	console.log(arguments.caller);
+		// } 
+		 // 指向 调用函数  demo
+		//----------------------------------------------
+		// 预编译  
+		// 四部 -- 1 生成 AO对象 -- 2 找变量声明 和 形参 当ao对象 的属性名 值为 undefined--  
+		//   		3 形参  实参赋值  --- 4 函数赋值
+		//  最后执行
+		// 数组
+		//  改变原数组----------------------------------------------------
+		//定义数组  var arr = []    var arr = new array()
+		//方法 .push() 在末尾添加数据 添加任意位
+		//方法 .pop()  剪切末尾值  剪切末尾值的可以赋值
+		//方法 .unshift() 在数组首位增加 数据
+		//方法 .shift() 在首位 删除数据
+		//方法 .reverse() 把数组顺序逆转
+		//方法 .splice(从第几位开始,截取多少的长度,在切口处添加新的数据)  第一位如果为 -1的话  取倒数第一位 (以此类推) 
+		//     pos += pos > 0 ? 0 : this.length
+		//方法 .sort() 按阿斯克码排序将数组内容排序    如果想将 数组降序  或升序 
+		//底层原理
+		// .push()
+		// Array.prototype.push = function(){
+		// 	for(var i = 0; i < arguments.length; i++){//遍历数组每一位
+		// 		this[this.length] = arguments[i];
+		// 	}
+		//		return this.length
+		// }
+		//底层原理
+		// arr.sort(function (a, b){
+		// 	return a - b; //升序
+		// 	return b - a; //降序
+		// -------------------------------------
+		//	冒号排序  if(a > b){
+		// 			return 正数
+		
+		// }else{
+		// 			rerurn 负数
+		// }
+		//--------------------------------------
+		// })
+		//  改变原数组----------------------------------------------------
+		//  不改变 原数组-------------------------------------------------
+		// .concar()  用于拼接数组   比如  var arr = arr1.concar(arr2);
+		// .slice()         参数 2个   var newArr = arr.slice(从该位开始截取，截取到该位)
+		// 					参数 1个   var newArr = arr.slice(从该位开始截取) 截取到最后
+		// 					参数 0个   var newArr = arr.slice() 截取全部
+		// .join()	里面要传 字符串形式的 数值 或 数字		var newArr = arr.join("-"); 用于拼接数字内容
+		// .split()  字符串方法  与join 互逆 			参数 填被拆取 得 内容
+		//  不改变 原数组-------------------------------------------------
+		// var arr = [1,12,5,81];
+		//函数  判断输入实参为 什么类型
+		// function type(target){
+		// 	var template = {
+		// 		"[object Array]" : "array",
+		// 		"[object Object]" : "object",
+		// 		"[object String]" : "string - object",
+		// 		"[object Number]" : "number - object",
+		// 		"[object Boolean]" : "boolean - object",
+		// 	}
+		// 	if(target === null){
+		// 		return "null";
+		// 	}
+		// 	if(typeof(target) == "object"){
+		// 		// 判断是否为引用类型
+		// 		var str = Object.prototype.toString.call(target);
+		// 		return template[str];
+		// 	}else{
+		// 		return typeof(target);
+		// 	}
+		// }
+		//  判断  某元素 是 数组还是对象
+		//  instanceof    判断 A的函数  有没有 B的原型
+		//  .hasOwnProperty()  返回布尔值  用于过滤原型 || 如果是无原型返回 true 反之false
+		// 对象克隆   origin 初始   target 目标
+		// function deepClone(origin, target) {
+		// 	var target = target || {};
+		// 	toStr = Object.prototype.toString;
+		// 	arrStr = "[object Array]";
+		// 	for (prop in origin) {
+		// 		if (origin.hasOwnProperty(prop)) {
+		// 			if (typeof(origin[prop]) == "object") {
+		// 				// if (toStr.call(origin[prop])) = arrStr) {
+		// 				// 	target[prop] = [];
+		// 				// } else {
+		// 				// 	target[prop] = {};
+		// 				// 	deepClone(origin[prop], target[prop]);
+		// 				// }
+		// 				target[prop] = toStr.call(origin[prop]) == arrStr ? [] : {};
+		// 					deepClone(origin[prop], target[prop]);
+		// 			} else {
+		// 				target[prop] = origin[prop];
+		// 			}
+		// 		}
+		// 	}
+		// 	return target;
+		// }
+		// var obj = {
+		// 	name: "weng",
+		// 	age: 10,
+		// 	sex: "male",
+		// 	add: function() {
+		// 		a: "b";
+		// 	}
+		// }
+		// var obj1 = deepClone(obj);
+		
+		//数组去重
+		// var	arr = [1,22,1,11,11,22,11]
+		// Array.prototype.unique = function(){
+		// 	var temp = {},
+		// 		arr = [],
+		// 		len = this.length;
+		// 		for(var i = 0; i < len; i++){
+		// 			if(!temp[this[i]]){
+		// 				temp[this[i]] = 'abc';
+		// 				arr.push(this[i]);
+		// 			}
+		// 		}
+		// 		return arr;
+		// }
+		// var newArr = arr.unique();
+		// console.log(newArr)
+		// haxi 式
+		
+		//反转
+		// var arr = [1,22,33,55,24]
+		// var sum = arr[0];
+		// var len = arr.length;
+		// for(var i = 0; i < parseInt(len/2); i++){
+		// 	sum = arr[i];
+		// 	arr[i] = arr[len-1-i];
+		// 	arr[len-1-i] = sum;
+		// }
+		// console.log(arr);
+		
+		// try .. catch  防止报错
+			// try{
+			// 	console.log(a); //报错 时 try 里报错以下代码不执行
+			// 					//但外部 继续执行
+			// }catch(e){
+			// 	//TODO handle the exception
+			//	//如果 try{}报错  执行catch 
+			// 	形参 e 为错误对象  返回 error.message 错误信息
+								   //error.name 	错误姓名
+			// }
+			// 错误类型 六种 Error.name 六种的对应信息
+			// 1. EvalError : eval 的使用与定义不一致
+			// 2. RangeError : 数值越界
+			// 3. ReferenceError : 非法或不能识别的引用数值 (常见)
+			// 4. SyntaxError : 发生语法解析错误			  (常见)
+			// 5. TypeError : 操作数类型错误				  (常见)	
+			// 6. URlError : URI 处理函数使用不当
+			
+			
+			// ES5 严格模式 
+			// 浏览器  基于es3.0 + es5.0 的新增方法 使用的 
+			
+			// es3.0 和 es5.0  的产生冲突 的 部分
+			// 启用es5.0严格模式     那么es3.0和es5.0 产生冲突的部分
+			// 就使用  es5.0  否则使用 es3.0
+			// 启用  es 5.0 严格模式的启动 要写在作用域最顶端    --   	"use strict";
+			// "use strict";
+			// 不再兼容es3的一些不规则语法, 使用全新的es5.0 规范
+			// 两种 用法:   (1)全局严格模式 (2) 局部函数 内严格模式(推荐)
+			// 启用es5.0 方式  用字符串的方式  是因为  兼容浏览器 
+			// 浏览器版本太低没有es5.0的函数  写字符串形式 至少不会报错
+			
+			// es5.0 严格模式 不支持with,arguments.callee,function.caller,以及arguments的属性
+			// 变量赋值前 必须声明   局部this 必须赋值(Person.call(null/undefinde))  
+			// 函数内  形参 重复报错  拒绝对象 属性重复 但是不报错
+			
+			//with 缺点 效率太低   es5.0  抛弃
+			//with(对象E){						
+			//	里面 的 内容 基于（对象E）的作用域	
+			// }
+			//with(document){
+			//	write('a');
+			// }
+			
+			// Dom  
+			//	获取document 里的 标签 及元素
+			// Id 获取          var div = document.getElementById("div");
+			// class获取        var div = document.getElementsByClassName("div");[0] 一组
+			// 标签获取         var div = document.getElementsByTagName("div");[0]	一组
+			// name 获取        var input = document.getElementsByName("input");
+			// css选择器 获取 	var div = document.querySelector("div > p div.dome"); 
+			   // 不推荐  不实时 (获取之后 不能更改，可以简单当副本)
+			// css选择器 获取 	var div = document.querySelectorAll("div > p div.dome");[0] 一组
+			   // 不推荐  不实时 (获取之后 不能更改，可以简单当副本)
+			   
+			// 遍历 节点树  
+			// parentNode -->  父节点 (最顶端的parentNode为#document);  用法: 获取元素.parentNode;
+			// childNodes -->  子节点们 
+			// firstChild -->  第一个子节点
+			// lastChild  -->  最后一个节点
+			// nextSibling --> 下一个兄弟节点
+			// prevSibling --> 上一个兄弟节点
+			//  节点的类型  1.元素节点 <--> 1       2.属性节点 <--> 2     3.文本节点 <--> 3  
+			 // 4.注释节点 <--> 8     5.document <--> 9          6.DocumentFragment(文档碎片) <--> 11
+			
+			// 节点的属性 
+			// nodeName 返回元素的标签名 以字符串形式(只读不可写)
+			// nodeValue 返回节点的内容 以字符串形式(可以更改)
+			// nodeType 返回元素类型 对应数字(1,2,3,8,9,11);
+			// attributes 节点属性的集合 (可以改变 id class 的类名 | id class 为属性节点)
+			
+			// 节点的方法 
+			// node.hasChildrenNodes()  查看node里有没有 节点
+			
+			// 遍历 元素 节点树 (除 children 以外 其他方法 IE9 及 IE 以下不兼容)
+			// parentElement --> 元素父节点  (最顶端的parentElement为html，因为document自称节点不叫元素);
+			// children      --> 只返回当前元素的元素子节点
+			// node.childrenElementCount === node.children.length 当前元素节点的子元素节点个数
+			// firstElementChild --> 返回的是第一个元素节点
+			// lastElementChild --> 返回的是最后一个元素节点
+			// nextElementSibling --> 返回前一个元素节点
+			// previousElementSibling  --> 返回后一个元素节点
+			
+			// Dom 结构树  (学习图片/Dom结构树.jpg)
+			// document.prototype --> HTMLDocument.prototype 
+			       --> Document.prototype --> Node.prototype
+			// 从底层方法 向上 继承 形成原型链(参考|学习图片/Dom结构树.jpg) 最终继承自 object.prototype;
+			
+			// Dom 基本操作
+			// document.getElementByTagName("*")   --->  选择所有元素
+			// 1.getElementById()方法 定义在 Document.prototype上, 即Element节点上不能使用
+			// 2.getElementsByName() 定义再 HTMLDocument上,即非HTMLDocument不能使用(xmldocument,Element)
+			// 3.getElementsByTagName() 定义在Document.prototype和Element.prototype上;
+			// 4.HTMLDocument.prototype定义了一些常用的属性, .body .head分别指 HTML中的<body> <head>
+			// 5.Document.prototype上定义了  documentElement 指代文档的根元素,在HTML文档中, 它指代的是<html>元素
+			// 6.getElementsByClassName,querySelectorAll,querySelector在 document.prototype,Element.prototype类中均有定义
+			
+			// 返回兄弟元素方法  (元素，数值(+1:下一个元素，-1:上一个元素)); 兼容IE 9 及 IE 9 以上
+			// var i = document.getElementsByTagName("i")[0];
+			// function retSibling(e,n){
+			// 	while(e && n){
+			// 		if(n > 0){
+			// 			if(e.nextElementSibling){
+			// 				e = e.nextElementSibling;
+			// 			}else{
+			// 				for(e = e.nextSibling;e && e.nodeType != 1; e = e.nextSibling);
+			// 			}
+			// 			n--;
+			// 		}else{
+			// 			if(e.previousElementSibling){
+			// 				e = e.previousElementSibling;
+			// 			}else{
+			// 				for(e = e.previousSibling;e && e.nodeType != 1; e = e.previousSibling);
+			// 			}
+			// 			n++;
+			// 		}
+			// 	}
+			// 	return e;
+			// }
+			
+			// Dom 基本操作
+			// 增
+			// document.createElement();  创建元素节点
+			// document.createTextNode(); 创建文本节点
+			// document.createComment();  创建注释节点
+			// document.createDocumentFragment(); 创建文本碎片节点;
+			// 插
+			// ori.appendChild(tar)    插入 tar节点 至ori (剪切操作)  类似 .push
+			// div.insetBefore(a,b)    在div中  把 b 元素 插入在 a 元素之前
+			// 删
+			// parent.removeChild()    剪切删除方法
+			// child.remove()		   删除子元素
+			// 替换
+			// parentNode.replaceChild(新元素，老元素)  替换(剪切被替换元素)
+			
+			// Element节点的一些属性
+			// Element.innerHTML  可以写(取,改,覆盖，末尾+=)HTML结构
+			// Element.innerText  可以写(取,改,覆盖，末尾+=)文本结构   (老火狐不兼容)/textContent--老IE不好使
+			// Element节点的一些方法
+			// Element.setAttribute("class","temp");  给元素添加行内属性和值
+			// Element.getAttribute("id");			  查看行内属性的值
+			// Element.hasAttribute("name")   方法 看看elem 里有没有name这个属性
+			// Element.removeAttribute("name")   移除elem上的name属性
+			
+			// 面试题 div.insetAfter(a,b)    在div中  把 b 元素 插入在 a 元素之后 
+			// 在Element.prototype(原型链) 上封装函数 insetAfter(a,b)
+			// var div = document.getElementsByTagName("div")[0];
+			// var i = document.getElementsByTagName("i")[0];
+			// var p = document.getElementsByTagName("p")[0];
+			// Element.prototype.insetAfrer = function(targetNode,afterNode){
+			// 	var beforeNode = afterNode.nextElementSibling;
+			// 	if(beforeNode == null){
+			// 		this.appendChild(targetNode);
+			// 	}else{
+			// 		this.insertBefore(targetNode,beforeNode)
+			// 	}
+			// }
+			// // 在原型链上 封装函数 将div里的子元素 逆序;
+			// var div = document.getElementsByTagName("div")[0];
+			// Element.prototype.reverseNode = function(){
+			// 	var arr = this.children;
+			// 	var count = this.children.length;
+			// 	while(count--){
+			// 		this.appendChild(arr[count]);
+			// 	}
+			// 	return arr;
+			// }
+			// Bom
+			// 查看 滚动条的滚动距离
+			// window.pageXOffset/pageYOffset  (IE8 IE8 以下不兼容)
+			// document.documentElement.scrollLeft/scrollTop
+			// document.body.scrollLeft/scrollTop
+			// 兼容性比较混乱,用时候 两个值相加 ,因为不可能存在两个同时有值  如下行代码 |
+			// document.documentElement.scrollLeft + document.body.scrollLeft;
+			// 封装 兼容性方法求滚动之后  返回X Y 轴 距离顶部 左边距离
+			// function getScrollOffset(){
+			// 	if(window.pageXOffset){
+			// 		return {
+			// 			X : window.pageXOffset,
+			// 			Y : window.pageYOffset
+			// 		}
+			// 	}else{
+			// 		return{
+			// 			X : document.documentElement.scrollLeft + document.body.scrollLeft,
+			// 			Y : document.documentElement.scrollTop + document.body.scrollTop
+			// 		}
+			// 	}
+			// }
+			
+			// 查看可视区窗口的尺寸
+			// window.innerWidth/innerHeight (IE8及IE8 以下不兼容)
+			// document.body.clientWidth/clientHeight (标准模式下，任何浏览器都兼容)
+			// document.documentElement.clientWidth/clientHeight (适用于怪异模式下的浏览器)
+			// document.compatMode  (查看 浏览器为标准模式还是怪异模式) "CSS1Compat" : 标准模式   "BackCompat" : 怪异模式
+			// 封装兼容性函数 使用后 返回可视窗口尺寸
+			// function getViewportOffset(){
+			// 	if(window.innerHeight){
+			// 		return {
+			// 			W : window.innerWidth,
+			// 			H : window.innerHeight
+			// 		}
+			// 	}else{
+			// 		if(document.compatMode == "Backompat"){
+			// 			return {
+			// 				W : document.body.clientWidth,
+			// 				h : document.body.clientHeight
+			// 			}
+			// 		}else{
+			// 			return {
+			// 				W : document.documentElement.clientWidth,
+			// 				h : document.documentElement.clientHeight
+			// 			}
+			// 		}
+			// 	}
+			// }
+			// 查看元素(dom)的位置
+			// dom.offsetLeft,dom.offsetTop
+			// 对于无定位的父级的元素,返回相对文档坐标,对于有定位的父级元素
+			// 返回相对于最近的有定位的父级的坐标
+			// dom.offsetParent (返回离自己最近的有定位的父级，如若没有父级定位，返回body，body.offsetParent为 null)
+			// 封装方法 求元素相对于文档的距离   递归
+			// var oContent = document.getElementsByClassName("content")[0];
+			// function getElementPosition(ele){
+			// 	if(ele.offsetParent.nodeName == 'BODY'){
+			// 		return {
+			// 			left : ele.offsetLeft,
+			// 			top : ele.offsetTop
+			// 		}
+			// 	}else{
+			// 		return {
+			// 			left : ele.offsetLeft + getElementPosition(ele.offsetParent).left,
+			// 			top : ele.offsetTop + getElementPosition(ele.offsetParent).top
+			// 		}
+			// 	}
+			// }
+			// console.log(getElementPosition(oContent))
+			// 让滚动条滚动
+			// window上有三个方法  scroll(x, y),scrollTo(x, y) | 两个方法无区别 滚动x, y 的距离     
+			//					  scrollBy(x, y) | 会在之前数据基础上做累加  
+			
+			// 读写元素 CSS 属性
+			// dom.style.prop(属性); 
+			// 可读写行间样式,没有兼容问题,碰到float这样的保留字属性,前面应该加css(W3C标准)
+			// 符合属性必须拆解,组成单词变成小驼峰式写法 (borderRadius: 50%;)
+			// 写入值必须是字符串格式
+			
+			// 查询计算样式
+			// window.getComputedStyle(ele，null)  IE8 及 IE8以下不兼容
+			// window.getComputedStyle(ele，"after").width    唯一获取伪元素的方式   获取伪元素的样式表  
+			// 扩展  |||   改变after 属性  要先写两个样式(附带after样式)     点击后改变class 类 的方式改变after样式 
+			// (只读不可修改style样式)
+			// 返回的计算样式的值都是绝对值,没有相对应的单位(任何单位转换为 px，颜色转换为rgb模式)
+			// ------------->
+			// IE独有属性 dom.currentStyle  (其他浏览器没有currentStyle)
+			// 计算样式只读   
+			// 返回的计算样式的值不是经过转换的绝对值 (em 单位 返回的还是 em)
+			// ---------------->
+			// 封装兼容性方法 查询dom计算CSS样式
+			// function getStyle(elem, prop){
+			// 	if(window.getComputedStyle){
+			// 		return window.getComputedStyle(elem,null)[prop];
+			// 	}else{
+			// 		return elem.currentStyle[prop];
+			// 	}
+			// }
+			
+			// 绑定事件处理函数
+			// ele.onxxxxx = function(event){}
+			// 兼容性很好,但是一个元素的同一个事件上只绑定一个处理程序
+			// 基本等同于写在行间HTML上  (句柄)  <div onclick="console.log("a")></div>
+			// obj.addEventListener("click-xxxx",处理函数,false);
+			// IE9以下不兼容(W3C标准),可以为一个事件绑定多个处理程序(但是如果参数中-绑定函数-用的是同一个function的话执行一次);
+			// obj.attachEvent("on"+click,处理函数) ||| IE9独有函数 
+			// 可以为一个事件绑定多个处理程序(用的是同一个函数的话，可以执行多次)
+			
+			// 事件处理程序的运行环境
+			// ele.onxxx = function(event){}
+			// 程序this 指向的是dom元素本身
+			// ele.addEventListener("click-xxxx",处理函数,false);
+			// 程序this 指向的是dom元素本身
+			// obj.attachEvent("on"+click,处理函数) ||| IE9独有函数 
+			// 程序this 指向的是window  (如果想要让 这个方法做的this指向自己 || 方法如下)
+			// div.attachEvent("onclick",function(){    handle.call(div)   }); 
+			// function (){ this.name = name};
+			// 封装兼容性方法 addEvent()    (来处理针对于不同浏览器的方法 || 解决This指向问题) 最终的事件处理函数
+			// function addEvent(elem, type ,handle){
+			// 	if(elem.addEventListener){
+			// 		elem.addEventListener(type,handle,false);
+			// 	}else if(elem.attachEvent){
+			// 		elem.attachEvent("on" + type,function(){
+			// 			handle.call();
+			// 		})
+			// 	}else{
+			// 		elem["on" + type] = handle;
+			// 	}
+			// }
+			// var div = document.getElementsByTagName("div")[0];
+			// 	addEvent(div,"click",function(){
+			// 	alert(1);
+			// })
+			
+			// 解除事件处理函数
+			// ele.onclick = false/null;
+			// ele.removeEventListener(type,fn,false);  |||  输入函数让事件解除
+			// ele.detachEvent("on" + type,fn)  与removeEventListener相似;
+			// 兼容解除封装函数
+			// function removeList(ele, type, fn){
+			// 	if(removeEventListener){
+			// 		ele.removeEventListener(type, fn, false)
+			// 	}else{
+			// 		ele.detachEvent("on" + type, fn)
+			// 	}
+			// }
+			// 若解除函数为匿名函数,则无法解除
+			// 事件处理模型 -- 事件冒泡 捕获
+			// 事件冒泡(非视觉上,HTML结构上) 嵌套关系的元素,会存在冒泡事件的功能,即同一事件,自子元素冒泡向父元素.||自底向上(结构上 子元素向父元素冒泡)
+			//	()
+			// 事件捕获(非视觉上,HTML结构上) 嵌套关系的元素,会存在冒泡事件的功能,即同一事件,自父元素捕获至子元素.||自顶向下
+			// 事件处理模型开启捕获 addEventListener(type,handle,false)  中的false 改为true ||| IE 没有捕获事件
+			// 一个对象一个事件类型 只能遵循 一个事件处理模型 |||| 如果对象绑定两个不同事件模型函数,则(触发顺序，先捕获，后冒泡)
+			// on + (focus, blur, change, submit, reset, select) 等事件不冒泡
+			
+			// 取消冒泡和阻止默认事件
+			// 取消冒泡:
+			// W3C标椎 event.stopPropagation(); (不支持IE9以下版本)
+			// 使用方法  事件函数参数对象event.stopPropagation();写在事件函数内
+			// IE独有 event.cancleBubble = true; (写在事件函数内)
+			// 封装取消的冒泡函数 function stopBubble(event){}  ||| 使用方法 在事件函数中 stopBobble(事件对象"event");
+			//   function stopBobble(event){
+			//	   if(event.stopPropagation){
+			//		   event.stopPropagation();
+			//	   }else{
+			//		   event.cancelBubble = true;
+			//	   }
+			//   }
+			// 阻止默认事件:     
+			// 默认事件 —— 表单提交, a标签跳转, 
+			// (比如// oncontextmenu 右击菜单事件 阻止右击菜单出现),(比如a标签跳转到顶部或者刷新页面，而阻止事件能解决跳转顶部或者刷新页面);
+			// 还可以   <a href="javascript:void(false)"></a> 这里void(),括号里的值为要写的 返回值 ，写false 为阻止事件，a标签不跳转顶部;	
+			// 在阻止事件的函数里  写 return false; 
+			// (以对象属性的方式的事件才能好使); 如果想用addEventListener(type,handle,false)方式阻止事件 如下--
+			// 事件对象  event.preventDefault();  在事件中写入  (IE9 以下不兼容)
+			// 事件对象  event.returnValue = false; 兼容IE
+			// 封装阻止默认事件的函数 cancelHandler(event);
+			//  function cancelHandler(event){
+			//	   if(event.prevetDefault){
+			//		   event.preventDefault();
+			//	   }else{
+			//		   event.returnValue = false;
+			//	   }
+			//  }
+			
+			// 事件对象
+			// 在事件函数中 定义 var event = event || window.event;   IE中无法直接兼容 event 需要 window.event;
+			// 事件源对象: event.target 火狐只有这个    event.srcElement IE只有这个 (点击的那个，源对象就是那个)
+			// 兼容性写法 var target = event.target || event.srcElement; 
+			// 事件委托 
+			// 利用事件冒泡和事件源对象进行处理
+			// 优点:  1.性能好,不需要循环所有的元素,一个个绑定事件
+			//        2. 灵活 当新的子元素时候 不需要 重新绑定 
+			// 例如
+			// var demoDiv = document.getElementsByTagName("div")[0];
+			// demoDiv.onclick = function (event){
+			// 	var event = event || window.event,
+			// 		target = event.srcElement || event.target;
+			// 	console.log(target.innerText );
+			// }
+			// 面试题  除了捕获addEventListener的第三个参数 改为 true,还有什么办法? 
+			// 答: elem.setCapture(); 对应的 elem.releaseCapture(); 用完释放,对其他事件有害,IE独有方法
+			
+			// 事件分类 
+			// 鼠标事件
+			// onclick 左键点击事件    onmousemove 鼠标移动事件   onmousedown 鼠标左键摁下    onmouseup 鼠标左键弹起
+			// contextmenu 右键点击事件  onmouseover onmouseenter 鼠标移入   onmouseout onmouseleave 鼠标移除
+			// 移动端 的三个事件 摁下 移动 弹起  touchstart touchmove touchend 
+			// 判断 鼠标左键,滚轮键,右键  在onmousedown或onmouseup的事件函数里 if(event.button == 1||2||3);
+			// DOM3标准规定 : onclick事件只能监听左键,只能通过mousedown 和 mouseup 来判断鼠标键;
+			// 键盘事件
+			// 键盘摁下 onkeydown  键盘弹起 onkeyup 键盘字符摁下 onkeypress
+			// 摁完键盘顺序 : onkeydown > onkeypress > onkeyup
+			// onkeydown 和 onkeypress 的区别
+			// onkeydown 可以检测到所有键盘摁键但不能监测大小写  
+			// onkeypress 可监测大小写但只能检测到字符摁键(阿斯克码||ASCII)
+			// string.fromcharCode(e.charCode)   将ASCII码装换成 普通字符
+			// 文本类操作时间
+			// input内容事件 oninput 用法  event.value
+			// input内容改变事件 onchange  如果失去焦点后 与上次获取焦点 的value不同 触发事件
+			// onblur 失去焦点  onfocus 获取焦点
+			// 窗体操作事件(window上的事件)
+			// scroll 滚动事件(滚动触发)  onload 文档加载后执行js(缺点，等页面渲染太慢，需要文档加载完)
+			
+			// 触屏事件 (touch)
+			// 事件类型
+			// touchstart  手指触摸屏幕时触发
+			// touchmove   手指在屏幕移动时候触发(持续触发的)
+			// touchend    手指离开屏幕时候触发
+			// touchcancle 手指触摸意外中断触发 
+			// 使用触摸事件 要用(addEventListener)方法
+			
+			// TouchEvent (触摸事件对象)   (事件参数)
+			// 事件对象中有三个属性
+			// touches : 指当前屏幕上的所有的手指对象	 (相对于屏幕) || 类数组
+			// targetTouches : 当前元素上手指对象     (相对于元素)  || 类数组
+			// changeTouches : 当前屏幕变化的手指对象(从无到有 -- 从无到有) || 类数组
+			// 手指对象的坐标值
+			// screenX/screenY  指手指触摸点的距屏幕左上角的坐标(X, Y)距离
+			// clientX/clientY  指相对于当前视口的坐标值 --- 移动端屏幕
+			// pageX/pageY      指相对于当前内容的坐标值(表示带滚动条的dom元素)
+			
+			// domtree  +  csstree = randertree(页面渲染)将等待
+			// reflow 重排    dom节点的删除,增加,dom节点的宽高变化,位置变化,display none --> block   
+			// offsetwidth offsetLeft   都会造成重排   浪费性能 
+			
+			// JOSN
+			// JOSN是一种传输数据的格式(以对象为样板，本质上就是对象，但用途有区别，对象就是本地用的，josn使用带来传输)
+			// json.parse()   string --> josn       "{'name' : 'jkl'}"  --> {name : jkl}
+			// json.stringify()  json --> string    {name : jkl} --> "{'name' : 'jkl'}" 
+			
+			// 异步加载js    正常加载(js不加载完  html+css别想执行)
+			// js加载的缺点: 加载工具方法没必要阻塞文档,过多的js加载会影响页面效率,一旦网速不好
+			// 那么整个网站将等待js加载而不进行后续渲染等工作
+			// 异步加载js的三种方法:
+			// 1.defer(IE) 异步加载,但要等到dom全部解析完毕才会执行,只有IE能用,也可以将代码写到内部(js与HTML并行下载) IE专属
+			// 2.async  异步加载,加载完就执行,async只能加载外部脚本,不能把js写在 script 标签里(除IE9-  其他浏览器兼容)
+			// 3.创建script,插入到DOM中,加载完CallBack (需要再下载)
+			
+			// var script = document.createElement("script");
+			// script.type = "text/javascript";
+			// script.src = "myLibrary.js";
+			// document.head.appendChild(script);
+			// //兼容IE
+			// script.onreadystatechange = function(){
+			// 	//IE onreadystatechange 状态码改变事件(监听状态是否改变)
+			// 	// script 属性.readyStade 默认状态 readyStade == "loading"
+			// 	// 当js加载完之后readyStade的值发生改变 改变成 readyStade == "loaded"   readyStade == "complete"(代表js加载成功)
+			// 	if(readyStade == "loaded" || readyStade == "complete"){
+			// 		var div = document.getElementsByTagName("div")[0];
+			// 		addEvent(div,"click",function(){ alert(1) })
+			// 	}
+			// }
+			// // 兼容IE以外;Safari chrome firefox opera 
+			// script.onload = function (){
+			// 	//Safari chrome firefox opera 兼容   IE script没有load方法;
+			// 	var div = document.getElementsByTagName("div")[0];
+			// 	addEvent(div,"click",function(){ alert(1) })
+			// }
+			//利用以上内容封装异步加载方法
+			// function loadScript(url, callBack){
+			// 	var script = document.createElement("script");
+			// 	script.type = "text/javascript";
+			// 	if(script.readyStade){
+			// 		script.onreadystatechange = function(){
+			// 			if(readyStade == "loaded" || readyStade == "complete"){
+			// 				callBack();
+			// 			}
+			// 		}
+			// 	}else{
+			// 		script.onload = function (){
+			// 			callBack()
+			// 		}
+			// 	}
+			// 	script.src = url;
+			// 	document.head.appendChild(script);
+			// }
+			// loadScript("myLibrary.js",function(){
+			// 	var div = document.getElementsByTagName("div")[0];
+			// 	addEvent(div,"click",function(){
+			// 		alert(1)
+			// 	})
+			// })
+			
+			// js加载时间线(浏览器时间线)
+			// js时间线
+			// 1.创建Document对象,开始解刨web页面,解析HTML元素和他们的文本内容后添加Element对象和text节点到文档中
+			//   这个阶段Document.readyStade = "loading"
+			// 2.遇到link外部css,创建线程加载,进行异步加载并继续解析文档
+			// 3.遇到script外部js,并且没有设置async, defer,浏览器加载,且阻塞,等待js加载完成并且执行该脚本,然后继续解析文档
+			// 4.遇到script外部js,并且设置有async, defer,浏览器创建线程加载,并且继续解析文档,对于async属性的脚本,脚本
+			//   加载后立即执行(异步加载禁止使用document.write()) onloa加载 使用document.write()会消除文档流
+			// 5.遇见img等,先正常解刨dom结构,然后浏览器异步加载src,并继续解析文档
+			// 6.当文档解析解析完成,document.readyState = "interactive"  (interactive 活跃的)
+			// 7.文档解析完成后,所有设置的defer的脚本会按照顺序执行
+			// 8.document对象触发DOMContentLoaded事件,这也标志着程序执行从同步脚本执行阶段,转化为事件驱动阶段
+			// 9.当所有的async的脚本加载完成并执行后,img等加载完后,document.readyState == "complete",window触发load事件
+			// 10.从此,页面以异步响应方式处理用户输入,网络事件等
+			
+			//  总结三点    1.创建document对象    2.解析异步,同步,img等src标签    3.执行并加载完毕
+			// 1.Document.readyStade = "loading"    2.document.readyState = "interactive"    3.document.readyState == "complete"
+			
+			// window.onload 与 JQ中的$(document).ready(function(){})有什么区别？
+			// 答: window.onload是在全部dom结构加载完执行(慢)  而$(document).ready(function(){})是在dom解析完就执行(快)
+			// 模拟JQ$(document).ready(function(){})方法
+			// (在上面写script)在head标签里面写 script 中写 document.addEventListener("DOMContentLoaded",function(){},false);
+			
+			
+			// 正则表达式(RegExp)
+			// w3c RegExp文档  网址如下
+			//https://www.w3school.com.cn/jsref/jsref_obj_regexp.asp
+			// " \ "  转义符 把字符串里面的\的后面一位转为文本 
+			// 例如 var a = "abc\"de" || console.log(a) ==>  "abc"de"
+			// (\在字符串里不显示)转译自己  为 var a = "ab\\cd" a ==> "ab/cd"
+			// 字符串不允许有回车,缩进符等  一旦写入""元素会报错(error) 所以我们要用/来省略回车等字符;
+			// 例如 var b = "abcd\
+			//				efd"
+			// " \n " 转义符加字母有特殊意义 例如 \n 为换行(不能在文档里换行，可以再console.log里换行)
+			// " \r " 行结束(结束意义) 
+			// " \t " (table Tab缩写  缩进符 一个大的空格)
+			// 两种创建方式
+			// 第一种  自变量创建
+			// var reg = /abc/; 创建正则表达式规则   var reg = /abc/mig    m i g属性(修饰符) 
+			// 示例 : var str = "abc";   reg.test(str); 返回true
+			// 以上内容表示 查看str字符串有 没有reg规则 有:true 无:false
+			// 第二种  构造函数创建
+			// var reg = new RegExp("abc","igm");
+			// 和第一种相似  第一参数 写规则  第二参数写属性(修饰符) i  g  m
+			// 创建正则扩展
+			// 正则创建也可以 var reg = /ab/; var reg1 = new RegExp(reg); 不指向一个地址;
+			// 如果 var reg1 = RegExp(reg)  那么reg 和 reg1 指向同一地址 同一指向
+			// 修饰符
+			// i  执行不区分大小写
+			// g  执行全局匹配 比如 s 搜索字符串的所有s
+			// m  多行匹配
+			// 正则表达式方法 
+			// reg.test(str)  查看str 中有没有符合reg 的规则片段 有:true 无:false
+			// str.match()    字符串方法  查看字符串里有没有符合reg 的规则片段 并返回数组(更直观)
+			// reg.exec()     与属性lastIndex相互配合  每次执行index值改变  每次执行匹配的下一个符合规则的字符串 
+			// [] 中括号 可以添加至正则里
+			// 例如:var reg = /[ab],[cd]/  []代表区间 表示一位  
+			// 可以取[]里的一位来匹配  (还有更省事的写法比如 [1-9],[a-z],[A-Z]) 详细参考正则手册
+			// var reg = /^a/ 表示开头匹配开头为a的字符   而在[^]中^表示是 !非 的 意思var reg = /[^a]/ 第一位不能是a的意思 
+			// var reg = /(abc|bcd)/ 在正则里 | 表示 或 的意思
+			// 元字符
+			// var reg = /\w/   \w === [0-9A-z_]  而  \W = [^\w]  大写w 去的是非\w(除\w以外的)
+			// \d === [0-9]  代表数字区间
+			// \D === [^0-9] 代表非数字区间
+			// var reg = /\[\d*:\d*.\d*\]/g
+			// var str = '[00:50.00]'
+			// console.log(str.match(reg))
+			// \s === [\t\n\r\v\f 还有空格]
+			// \S === [^/s] 非/s(除\s以外的)
+			// \b === 单词边界
+			// \B === 非单词边界
+			// \t === 制表符 Tab打空格
+			// \n === 换行符
+			// \r \v \f(可以参考w3c手册,不常用)
+			// \uxxxx 匹配unicode编码字符  [/u0000-/uffff] 匹配一切字符
+			// . === [^/r/n] 非换行回车符(除外得所有字符)
+			// 量词 (n表示变量w
+			// var reg = /n+/  		表示至少重复1次或更多次匹配		 {1, }
+			// var reg = /n*/  		表示0次或更多次匹配		 {0, }
+			// var reg = /n?/  		表示任何0 到 一个 的或多个n {0, 1}
+			// var reg = /n{3}/		3个3个的匹配    {表示区间}
+			// var reg = /n{4,6}/	4至6个n序列匹配
+			// var reg = /n{4,}/	第二个位置不写参数 ,表示4到正无穷
+			// var reg = /n^/    	以n开头的
+			// var reg = /ed$/      以ed结尾的
+			// ------------------------------
+			//检测一个字符串首有 或者 尾是否含有数字
+			// var reg = /^\d|\d$/g;
+			// var str = "123adv"
+			// reg.test(str);
+			//---------------------------------
+			// 检测一个字符串首尾都含有数字
+			// var reg = /^\d{\s\S}*\d$/g;
+			// var str = "123adv"
+			// reg.test(str);
+			//------------------------------
+			// RegExp 对象属性
+			// .global       检测regExp对象是否有g 有返回true 无返回false
+			// .ignorecase 	 检测regExp对象是否有i
+			// .multiline    检测regExp对象是否有m
+			// .lastIndex    检测下一次匹配成功的第一位下表位置(初始是0)加\g;
+			// .source  	 返回正则表达式的源文本; 
+			//------------------------------
+			// 反向引用
+			// ()子表达式  在正则可以记录()里面的内容   \1可以重复()里的内容  \2可以重复第二个()的内容  \3......
+			// 例子: 找AABB规则字符串
+			// var reg = /(\w)\1(\w)\2/g;
+			// var str1 = "aabbccadaddee";
+			// console.log(str1.match(reg))
+			// console.log(reg.exec(str1))  // 返回结果会是符合规则的字符串和所有匹配子表达式内容
+			//-----------------------------
+			// 支持正则表达式的string对象的方法
+			// .match   类似exec  返回符合规则的字符串和子表达式 || 但是 正则加\g返回结果会只返回符合规则的字符串
+			// console.log(str.match(reg));
+			// .search  返回符合规则字符串第一位的下标位置 || 如果字符串没有符合规则的字符串片段返回-1(代表错误信息)
+			// console.log(str.search(reg));
+			// .split  按照()内容拆分字符串 || ()里可以填写正则表达式，然后变成按正则拆分字符串; || 也可能返回子表达式
+			// console.log(str.split(reg));		
+			// .replace  查找字符串中符合规则的字符串片段并替换成第二个参数
+			// console.log(str.replace(reg,"aabb"));
+			// console.log(str.replace(reg,"$1$2")) 第二个参数也可以反向引用正则里的子表达式 $1:第一字表达是 $2......
+			// console.log(str.replace(reg,function($, $1, $2){
+				//  形参$ 代表全局    $1 $2 代表子表达式
+				// return $2 + $2 + $1 + $1
+			// }))
+			// 试题: 将 the-first-name 转为 小驼峰式 : the-first-name
+			// var str = "the-first-name";
+			// var reg = /-(\w)/g;
+			// console.log(str.replace(reg,function($, $1){
+			// 	return $1.toUpperCase();
+			// }))
+			//试题: 字符串去重 111112222333333 转换成 123
+			// var reg1 = /(\w)\1*/g;
+			// var str = "111112222333333";
+			// console.log(str.replace(reg1,"$1"))
+			//-----------------------------
+			// 知识点 正向预查 正向断言
+			// 查找字符串好多a 中 后面跟b的a(第一个a)  || b只参与修饰 真正查找的还是a
+			// var str = "abaaaaaaaaaaaaaa"
+			// var reg = \a(?=b)\g;  (正向预查)     
+			// a(?=b) : 好多a 中查找后面跟b的a
+			// a(?!b) : 好多a 中查找后面不是b的a
+			// console.log(str.match(reg));
+			//-----------------------------
+			// 正则匹配原则(贪婪匹配) || 能匹配多位就不匹配少位
+			// 可以打破匹配原则  (非贪婪匹配)  正则规则末尾加 ？类似 : var reg = /\w?/  
+			//--------------------------------
+			// 如果要匹配特殊字符   要在特殊字符前面加转译符  如 \?, \*, \(, \)而匹配$ : 正则里写 $$;
+			//--------------------
+			// 结尾内容量太多  虚了解即可(懒)
+			// 百度面试题 正则最难
+			// var str = "10000000000000"  要求 要每三位加一点  改变成100.000.000.000.000
+			// 解答 : 
+			// var reg = /(?=(\B)(\d{3})+$)/g;
+			// var str = "1000000000000000";
+			// console.log(str.replace(reg, "."))
+			
+			var str = '18148388939'
+			
+			var reg = /^\d{11}$/g;
+			 // console.log(str.match(reg));		
+			// 渲染模式
+			// 在 html文件中  加<!DOCTYPE html>为标准模式     去除掉<!DOCTYPE html>为怪异模式
+			// document.compatMode 标准模式 Css1compat  怪异模式 BackCompat
+			// 在个别浏览器的情况下 比如IE6  
+			// 在怪异模式下 边框，margin不算在宽高内 行内元素可以设置宽高
+			// <label> for属性 可以连接input  给input设置Id 把id属性值连接到for=""中
+			// 例如:<label for="demo">
+			// 	    <input type="text" id="demo"/> 
+			// 连接后 点击label 就相当于点击了input  同时点击了 label 和 input 
+			// 图片预加载 (图片缓冲后再加载到页面，不会出现图片在页面加载一半的情况)
+			// var img = new Image(); 创建Img标签 类似 createElement("img");
+			// var img = new Image();
+			// img.src = "./img/1.jpg";
+			// img.onload = function(){
+			// 	document.body.appendChild(img);
+			// }
+			// 图片懒加载  (事件触发图片加载)
+			// var btn = document.getElementsByTagName("button")[0];
+			// btn.onclick = function(){
+			// 	var img = new Image();
+			// 	img.src = "./img/1.jpg";
+			// 	document.body.appendChild(img);
+			// }
+			// 淘宝图片加载模式 || 图片懒加载加预加载(淘宝图片加载 为当滚动到图片加载图片)
+			// var btn = document.getElementsByTagName("button")[0];   
+			// btn.onclick = function(){   // 点击要变成 滚动
+			// 	var img = new Image();
+			// 	img.src = "./img/1.jpg";
+			// 	img.onload = function(){
+			// 		document.body.appendChild(img);
+			// 	}
+			// }
+			// 练习琐碎知识点
+			// 练习随机数    设置 2 - 5 的随机数
+			// console.log(Math.floor(Math.random()*5)+2);
+			// 创建文档碎片  用来提升浏览器性能(插入文档自动消除)
+			// var frag=document.createDocumentFragment();
+			// CDN  (需要了解知识点   缓存数据库)
+			// 遍历数组方法 arr.forEach()
+			// 使用forEach();  
+			// ele 表示数组里的每个值    而index 属于每个下标 || ele, index 属于方法内置参数可以更改
+			// var arr = ["a", "b", "c"];
+			// arr.forEach(function(ele,index){
+			// 	console.log(ele);
+			// 	console.log(index);
+			// })
+			//--------------------------------------------------
+			// 封装byclassName()			// 在Document的原型链上封装自己的获取dom元素(兼容性高)
+			Document.prototype.getClassName = function (className){
+				var allDomArr = Array.prototype.slice.call(document.getElementsByTagName("*"),0),
+					filterArr = [];	
+					//slice.call(document.getElementsByTagName("*"),0) 改变slice方法的this指向  指向类数组
+				function dealClass(dom){
+					var reg = /\s+/g;
+					var arrClassName = dom.className.replace(reg," ").trim();
+					return arrClassName;
+				}
+			// 	// 封装 正则方法 过滤掉多余的空格
+			// 	// .trim()  去除首位边界空格
+			// 	allDomArr.forEach(function(ele, index){
+			// 		//.forEach() 数组方法 遍历数组
+			// 		var itemClassArr = dealClass(ele).split(" ");
+			// 		for(var i = 0; i < itemClassArr.length; i++){
+			// 			// 循环数组  并且判断如果class与参数相同 输出当前元素
+			// 			if(itemClassArr[i] == className){
+			// 				filterArr.push(ele);
+			// 				break;
+			// 				// 找到 元素跳出  避免浪费性能
+			// 			}
+			// 		}
+			// 	})
+			// 	return filterArr;
+			// 	// 函数结束 输出符合规则的元素数组;
+			// 	// var oClass = document.getClassName("demo");
+			// console.log(oClass)}	
+			// var oClass = document.getClassName("demo");
+			// console.log(oClass)
+			// // 我们可以开始使用  自己的方法了
+			//--------------------------------------------------------------------------
+			// var personArr = [
+			// 	{name : "aaa",sex : "f"},
+			// 	{name : "bbb",sex : "m"},
+			// 	{name : "ccc",sex : "f"},
+			// ]
+			// 数组深入
+			// 1.forEach 遍历数组
+			// 自己仿制forEach源码
+			// Array.prototype.myForEach = function(func){
+			// 	for(var i = 0; i < this.length; i++){
+			// 		func(this[i], i, this);
+			// 	}
+			// } 
+			// // 第一个参数  为  遍历的每个元素, 二参数   每个参数的下标, 三参数 this 把自己遍历length 遍
+			// var arr = [1, 15, "515"];
+			// arr.myForEach(function(ele, index, array){
+			// 	console.log(array)
+			// })
+			// 2.filter  筛选  || 在函数中return true 把当前循环的元素返回  return false 不返回当前循环元素
+			// 仿制 filter 源码
+			// Array.prototype.myFilter = function(func){
+			// 	var arr = [];
+			// 	for(var i = 0; i < this.length; i++){
+			// 		if(func(this[i], i)){
+			// 			arr.push(this[i]);
+			// 		}
+			// 	}
+			// 	return arr
+			// }
+			///---------------------------------
+			// var newArr = personArr.filter(function(ele, index){
+			// 	// 如果数组中每个元素 的 sex == "f"  把 sex == "f" 的元素 返回到新数组中
+			// 	if(ele.sex == "f"){
+			// 		return true;
+			// 	}else{
+			// 		return false;
+			// 	}
+			// })
+			// console.log(newArr)
+			// // 3. map
+			// // 仿制map 方法源码
+			// Array.prototype.myMap = function(func){
+			// 	var arr = [];
+			// 	for(var i = 0; i < this.length; i++){
+			// 		if(this[i] && typeof this[i] == "object"){
+			// 			var newObj = {};
+			// 			deepClone(newObj, this[i]);
+			// 			arr.push(func(newObj, i))
+			// 		}else{
+			// 			arr.push(func(this[i], i))
+			// 		}
+			// 	}
+			// 	return arr;
+			// }
+			// var newArr = personArr.myMap(function(ele, index){
+			// 	if(ele.sex == "f"){
+			// 		ele.age = 17
+			// 		return ele;
+			// 	}else{
+			// 		ele.age = 18
+			// 		return ele;
+			// 	}
+			// }) 
+			// console.log(newArr)
+			// 深度克隆
+			// function deepClone(target, origin){
+			// 	if(origin != null){
+			// 		for(prop in origin){
+			// 			if(origin[prop] && typeof origin[prop] == "object"){
+			// 				if(Object.prototype.toString.call(origin[prop]) == "[object Array]"){
+			// 					target[prop] = [];
+			// 				}else{
+			// 					target[prop] = {};
+			// 				}
+			// 				target[prop] = deepClone(target[prop], origin[prop]);
+			// 			}else{
+			// 				 target[prop] = origin[prop];
+			// 			}
+			// 		}
+			// 	}
+			// 	return target;
+			// }
+			// 4.reduce
+			// 仿制reduce源码
+			// Array.prototype.myReduce = function(func, init){
+			// 	var previous = init, k = 0;
+			// 		if(init === undefined){
+			// 			previous = this[0];
+			// 			k = 1;
+			// 		}else{
+			// 			for(k; k < this.length; k++){
+			// 				previous = func(previous, this[k], k)
+			// 			}
+			// 		}
+			// 	return previous;
+ 		// 	}
+			// // 累加器  里面 func第一个参数 为累加参数 存的是上一次 return出的值
+			// // 方法的第二个参数 为 累加参数第一次的值
+			// var arr = [1, 2, 3, 4, 5];
+			// var value = arr.myReduce(function(preValue, ele, index){
+			// 	return ele + preValue;
+			// },10)
+			// // 5.  reduceRight 源码 与 reduce区别不大   reduceRight从右向左累加
+			// // 从右向左 累加
+			// var value1 = arr.myReduceRight(function(preValue, ele, index){
+			// 	console.log(index)
+			// 	return index + preValue;
+			// })
+			
+			// JQuery
+			// 老版本Jqery 兼容 es6之前 版本
+			// jquery 压缩前 260KB   压缩后 大约80KB
+			// 为了节省空间 压缩了Jquery里方法的变量名长度 和 空格回车等字符长度
+			// https://jquery.com/      	  英文文档(谷歌翻译)
+			// https://jquery123.com/   	  中文文档
+			// https://www.html.cn/jqapi-1.9/ 方法文档
+			
+			// JQuery dom获取
+			// $("div")  和css选择器相同  
+			// $(".div") 获取class 类名
+			// $("#div") 获取ID	   类名
+			// $(function(){})   转变为立即执行函数
+			// $(undefined/null)  返回jquery 空对象
+			// $("p", ".demo")    意思为选择 .demo 中的 p 标签
+			// 注意 : 选出的一组元素 一起处理,省略循环,这样在js中是不允许的
+			// $()  里面可以写css 选择器, 原生dom, jquery对象, null/undefined
+			// 函数function(){}, seletor/content等
+			// $() === jQuery()    $ === jQuery    (使用相同，不代表完全一样)
+			// jquery() 为jquery中的一个大函数  形参匹配dom对象, 函数等为 sizzle 正则匹配
+			// jquery 特有的选择规则 
+			// $("ul>li:first")  选择ul直接子元素li 的第一个li
+			// $("ul>li:last")  选择ul直接子元素li 的最后一个li
+			// $("ul>li:eq(6)")  选择ul直接子元素li 的下标为6的li
+			// $("ul>li:odd")   选择ul直接子元素li 的下标为奇数的li
+			// $("ul>li:even")  选择ul直接子元素li 的下标为偶数的li
+			// jquery 方法筛选 获取dom 元素
+			// $("li").filter(".demo") 选择 所有li标签中 类名为.demo的标签
+			// $("li").filter(function(index){return ture}) 
+			// jQuery的filter与原生js的filter相似 参数也可以填函数 函数参数只有下标index -->
+			// -->  return true返回全部li return false 全部li都不返回   （用于判断） 
+			// $("li").not(function(index){return ture})  和filter相同  (取反) || 除了(形参) 其他.........
+			// $("li").has("p") 选取所有 li中有p标签的 li   // 获取li
+			// $("li").find("p") 选取所有 li中有p标签的 p   // 获取p
+			// $("li").eq(3)   选取所有 li中下标为3的li   
+			// console.log($("li").eq(1).is(".demo"))  -->
+			// --> is()方法 判断 所有li中下标为1的li的class是不是 demo  正确返回true || 错误返回 false
+			// .css() 方法三种方式使用   
+			// 传参 字符串 $(".demo").css("width", "100px").css("color", "red");
+			// 传参 对象 $(".demo").css({width: 100, height: "100px"})
+			// 取值 console.log($(".demo").css("width"))  // 取demo的宽度的值
+			// .text()  与原生方法相同改变元素中的文本 -->
+			// -->  innerText   使用: $(".demo").text("123");				|| 传参修改 不传参获取
+			// .html()  与原生方法相同改变元素中的html结构 -->    
+			//  --> innerHTML   使用: $(".demo").html("<span>span</span>");  || 传参修改 不传参获取
+			// jQuery中可以重复使用方法   因为jQuery可以链式时调用 
+			// 每次使用方法有对象return对象||没对象return this(构成jQuery链式调用)
+			// .prop() 函数主要依赖的则是js中原生的对象属性获取和设置方式 例如: .className .Id .type .src .checked
+			// .prop()  传参 （"属性名", "属性值"）为 赋值 || 传参  ("属性名") 为取值 || 只能为原生js属性("class", "demo")
+			// .prop() 还可以 实时的查看 js原生属性的状态
+			// .prop() 例如: console.log($(".demo").prop("checked")) 如果勾选  返回ture 未勾选 返回 false
+			// .prop() 例如: console.log($("opction:eq(3)").prop("selected")) 如果第四个opction被选中  返回ture 未被选中 返回 false
+			// .prop() 例如: console.log($("input").prop("disabled")) 查看input 有没有被禁用 如果被禁用  返回ture 未禁用 返回 false
+			// .attr() 函数主要依赖的是Element对象的setAttribute(),和getAttribute()两个原生js方法
+			// .attr()  传参 （"属性名", "属性值"）为 赋值 || 传参  ("属性名") 为取值  (取属性的话可以取代prop())  常用
+			// .next() 下一个 兄弟元素  /    .prev() 上一个兄弟元素
+			// 在jQuery中  this 不是对象 而是 直接的dom 所以要把dom转为对象 改变为  console.log($(this).index());查看当前的index下标是多少
+			// .index()  返回在兄弟节点中下标是几 例如: console.log($("li:eq(2)").index())   
+			// .removeClass("active") 清除dom元素的class 的active   如果 不填参数 .removeClass() 清除所有class类名
+			// .addClass("active") 添加dom元素class类名为active
+			// removeClass()/addClass()  两个方法传参也可以传Function  || 用于做判断
+			// 例如: $(".demo").addClass(function (index){if(index % 2 == 0){return "activer" }}) || 查看时候 复制出来 整理代码格式
+			// 例如: $(".demo").removeClass(function (index){if(index % 2 == 0){return "activer" }}) || 查看时候 复制出来 整理代码格式
+			// $(".demo").removeClass/addClass(function)  -->  用于判断  return填 "类名"
+			// .toggleClass("active")  删除/添加 class类名   如果dom上 有active 就删除  如果没有  添加active
+			// .toggleClass()  用于切换 删除/添加 class类名
+			// .insertBefore()    dom5.insertBefore(dom1)  把dom5插入到dom1前面 (剪切操作)
+			// .before()         dom1.before(dom5)       dom1的前面是dom5 (与insertBefore相同，写法不同 )(剪切操作)
+			// .insertBefore()/.before()  区别 : 两个方法返回的jQuery对象是不同的，jQuery链式调用操作的dom对象也不同
+			// .appendTo         dom5.appendTo(dom1)     把dom1插入到dom5中(剪切操作)  (dom1为父元素，dom5为子元素)(不常用，了解即可)
+			// .append           dom1.append(dom5)       把dom5插入到dom1中(剪切操作)  (dom1为父元素，dom5为子元素)(常用) || 与appendChild()相同
+			// .appendTo ()/.append ()  区别 : 两个方法返回的jQuery对象是不同的，jQuery链式调用操作的dom对象也不同 
+			// .prepend()     与 append()相同,但是要把子元素插入到 父级元素的 第一位子元素
+			// .prependTo()   与 append()相同,但是要把子元素插入到 父级元素的 最后一位子元素
+			// .remove()      删除当前dom元素并且删除自己身上的事件 返回值为 被删除dom元素 可用变量接收  var item = dom.remove();
+			// .detach()	  删除当前dom元素 返回值为 被删除dom元素 可用变量接收  var item = dom.detach(); || 返回的dom元素保留事件
+			// .on()          与addEventListener()相似 , 第二个参数可以写(对象, 数组 || 事件源)，如果想传参字符串填在第三个参数上   通过内外置func参数e.data调用
+			// 如果第二个参数是字符串的话他会判断他是不是事件源对象,会寻找"a" 寻找a标签,如果让e.data返回字符串的话写在第三个参数上(例如2)
+			//  例如1：     $(".only").on("click" , {name: "new city"},function(e){
+			//       	   console.log(e.data)
+			//       	   })
+			//  例如2：     $(".only").on("click" , "a", "a", function(e){
+			//       	   console.log(e.data)
+			//       	   })
+			// .off()         解除绑定事件   例如: $(".demo").off("click");
+			// .off()   第一个参数可以解绑事件("click")  第二参数可以解绑事件源对象("item") 第三参数与可以解绑函数(a)(如果dom对象绑定两个函数的话 a函数， b函数)
+			// .off()   例如: $(".demo").off("click"，"item", a);
+			// .one("click", "item", function(){})    dom.one("click", "item", function(){}) 只允许绑定一次,只能点击一次
+			// $(window).scroll(function(){})  滚轮触发事件,滚动时候触发function
+			// $(window).scrollTop()           滚轮滚动出的距离 + px;
+			// 模仿||兼容fixed写法 :
+			// $(window).scroll(function (){
+			// 	$("demo").css({width: $(window).scrollTop() + 100});
+			// })
+			// $("div").innerWidth();   返回值为 div的 content宽 + padding宽
+			// $("div").outerWidth();   返回值为 div的 content宽 + padding宽 + border宽
+			// $("div").outerWidth(ture);   返回值为 div的 content宽 + padding宽 + border宽 + margin宽
+			// $("div").width()   div的实际宽度
+			// jQuery 中生成dom  
+			// $("<div class="demo">123</div>").appendTo(body)  (双标签写法)
+			// $("<div/>").appendTo(body)   $("<span>").appendTo(body) (单标签写法，填不了内容和class)
+			// $("<li>", {html: 123, wwz: "567"}); 创建标签 并且添加html方法改内容值(属性为方法，如果属性不是方法||作为属性添加到li标签上<li wwz="567"></li>)
+			// jQuery 事件上的  click事件对象event的属性
+			//---------------------------------------------------->
+			// $("body").click(function(event){
+			// 	console.log(event.pageY + "t");  //相对于文档body顶部 + 滚动的距离Y
+			// 	// event.pageX || 同上
+			// 	console.log(event.clientY  + "s") //相对于窗口,浏览器窗口顶部
+			// 	// event.clientX || 同上
+			// 	console.log(event.screenY  + "c") // 相对于屏幕 + 浏览器导航栏 + 网址栏的距离 + 浏览器拖动向下的距离
+			// 	// event.screenX || 同上
+			// })
+			//---------------------------------------------
+			// jQuery 事件上的  keydown事件对象event的属性
+			//------------------------------------------------------>
+			// $("input").on("mousedown contextmenu keydown", function(event){ // .on() 可以同时绑定多个事件
+			//  event.preventDefault()   // 阻止右击菜单事件 (原生js系统方法)
+			// 	event.stopPropagation();   // 阻止冒泡事件, jQuery 兼容方法
+			// 	console.log(event.which) // 返回对应按键的阿斯克码
+			// 	console.log(event.button) // 返回值为鼠标三键的下标 0(左键), 1(滚轮键), 2(右键)
+			// 	return false // 即阻止默认事件,又阻止冒泡事件
+			// })
+			//-------------------------------------------------------
+			// .offset()   $(".wraper").offset().top/left    返回值为对象包含left/top   相对于文档的top/left值
+			// .position   $(".demo").offset().top/left    返回值为对象包含left/top   相对于有定位的父级的top/left值
+			// .parent()    console.log($('span').parent())    不填参数返回直接父级元素,
+			// .parent()    console.log($('span').parent("p")) 填参数判断参数是否为父级元素,是父级返回父级元素,不是则返回空jQuery对象
+			// .offsetParent()  返回离自己最近的有定位的父级,如果没有定位父级返回最顶部父级html
+			// .parents()  不传参返回和自己有关的所有父级元素组成类数组， 传参判断参数和自己的父级们有没有对应的，有则返回符合参数的所有父级元素，没有则返回空jQuery对象 
+			// .closest()  必须传参, 返回离自己最近的对应参数父级 || 例如:console.log($("span").closest("div")); 
+			// .val()      与js中value相似  获取input的值 
+			// .each()     与forEach()相似,但each可以遍历jQuery对象  || 例如: $("li").each(function(index, ele){}) 有两个参数,第一个为下标, 第二个为每个元素(也可以写this)
+			// .end()      回退操作   当使用end方法时候当前dom回退到最初状态,可以再次链式调用
+			// .end() 例如: $("li").eq(0).css({color: "red"}).end().eq(4).css({color: "green"});
+			// .end()  $("li")eq(0).css({color: "red"}).end() 与 $("li")eq(0).css({color: "red"}).prevObject jQuery属性相同
+			// .siblings() 选出当前元素所有兄弟元素(除了自己)  例如: $("li:eq(2)").siblings().css({color: "red"});
+			// .prevAll()  选出当前元素上面的所有兄弟节点(除了自己) 	例如: $("li:eq(3)").prevAll().css({color: "red"})
+			// .nextAll()  选出当前元素下面的所有兄弟节点(除了自己) 	例如: $("li:eq(3)").nextAll().css({color: "red"})
+			// .prevUntil() 选出当前元素到上面dom元素 方法的参数  中间的dom元素(不包括首尾元素)
+			// .prevUntil()  例如: $("li:eq(2)").prevUntil($("li:eq(0)"));选取 中间的dom元素(li:eq(3)) || 不包括首尾(参数也可以填原生dom)
+			// .nextUntil() 选出当前元素到下面面dom元素 方法的参数  中间的dom元素(不包括首尾元素)
+			// .nextUntil()  例如: $("li:eq(2)").nextUntil($("li:eq(4)"));选取 中间的dom元素(li:eq(3)) || 不包括首尾(参数也可以填原生dom)
+			// .clone()    克隆dom元素的方法 例如: $("li:eq(0)").clone()  不填参数单纯克隆dom对象,参数中填true(clone(true))克隆dom并且克隆dom上绑定的事件(可以赋值)
+			// .wrap()     父级外包裹 例如: $("li:eq(0)").wrap($("<div>"))    可以改变dom的父级,参数填父级dom元素,可以自己创建dom,也可以查找dom
+			// .wrapInner() 内包裹   例如: $("li:eq(0)").wrapInner("<p>")   给第一个li的直接子级变为p标签,li里的所有内容存放到p中,p标签变为li唯一子元素
+			// .wrap/wrapInner()  两个方法中参数可以 填function(){}(用于遍历判断)  例如: 
+			// $("li").wrap/wrapInner(function(index) {
+			// 	if(index == 1){
+			// 		return "<div>"
+			// 	}else if(index == 2){
+			// 		return "<p>"
+			// 	}else{
+			// 		return "<span>"
+			// 	}
+			// })
+			//---------------------------------------------------------------------------------->
+			// .wrapAll()  让dom的父级变为指定参数写的dom元素,如果所有dom(li)不在同一级,使用此方法会打乱原本的html结构 例如: $("li").wrapAll("<div>");
+			// .unwrap()  解除包裹,删除自己的直接父级dom元素, 不能删除结构化标签(body,html,head)  例如: $("li:eq(5)").unwrap(); 删除li的父级元素
+			// .add()    集中操作   例如: $("li").eq(0).add($("li").eq(2)).css({color: "red"})   同时选中第一个li和第三个li集中操作;
+			// .slice(0,2)  截取dom集中操作(算头0不算尾2)  例如: $("li").slice(0, 2).css({color: "red"});
+			// .empty()   清除dom元素中的html结构     例如: $("ul").empty()    ||   与 $("ul").html("") 意思相同
+			// .serialsize() 串联表单数据(get请求)    例如:
+			// $("input:eq(2)").click(function(e){  //第三个input提交按钮点击后
+			// 	e.preventDefault();  // 清除默认事件,清除了点击刷新页面提交,get请求
+			// 	form.serialsize(); // 串联表单数据 返回值为 提交数据
+			// 	console.log(form.serialsize()) // 打印提交数据
+			// })
+			//-----------------------------------------------------------------------
+			// .serializeArray()  把提交数据封装成数组(方便自己使用)
+			// .animate()  dom元素运动 
+			// $("demo").animate({width: 300, height: 300, left: 500}, 1000, "linear", function(){console.log(1)})
+			// .animate()    第一个参数为对象,对象内容为运动之后的dom元素style样式,第二参数为时间,
+			//               第三个参数为速率(jQuery提供两种速率) || swing和linear(可以从网上下载jQuery速率插件 || jquery.easing.js )
+			//  			 第四个参数为回调函数,  动画执行后执行函数
+			// .stop()  (默认不穿参 .stop(false, false))停止当前运动,继续后续运动  例如$("demo").animate().animate() |||  $("demo").stop() (停止当前运动，继续执行第二个animate)
+			// .stop(true)  停止所有运动,不执行任何animate;
+			// .stop(true, true)  停止运动并且直接到达animate动画目标点
+			// .stop(false, true)  直接到达第一个animate目标点,继续后续运动
+			// 总结 .stop()  传的第一个参数 : 是否停止后续所有运动   false: 不停止,继续运动  true: 停止后续所有运动
+			//               传的第二个参数 : 是否立即到达至当前目标点， false :  到达           true : 不到达 
+			// .delay()   延迟时间,参数填时间
+			// .slideUp(speed, callback)    height滑动隐藏dom元素
+			// .slideDown()    height滑动显示dom元素(需要dom先隐藏在显示)
+			// .slideToggle(speed, callback)   用于切换slideUp/slideDown   如果dom显示触发slideToggle()隐藏反之显示
+			// .fadeIn()    淡入dom元素(需要dom先隐藏在显示)
+			// .fadeOut()    淡出dom元素
+			// .fadeToggle()  用于切换fadeIn/fadeOut    如果dom显示触发fadeToggle()隐藏反之显示
+			// .trigger()  可以触发自定义事件
+			// .trigger() 例如:   || (需要自己代码演示自己理解)
+			//------------------------------------------------------------->
+			// $(".demo").on("eat", function(event, a){   // 使用on事件使用自己定义的eat,  自定义可以传参a,a为定义数组第一位
+			// 	$(this).animate({width: $(this).width() + a}); // 定义动画
+			// })
+			// var timer = setInterval(function (){ // 定义计时器
+			// 	if($(".demo").width() > 300){   // 如果width 大与300
+			// 		$(".demo").remove();  // .demo 删除
+			// 		clearInterval(timer) // 停止定时器
+			// 	}
+			// 	$(".demo").trigger("eat", [100]);  // 使用trigger定义eat   , 并且传参数组
+			// },1000)
+			//--------------------------------------------------------------
+			// jQuery 工具方法
+			// 类似 $("div").html() 实例方法   定义在jQuery dom原型上的方法称为实例方法
+			// 类似$.type(arr)   工具方法  定义在jQuery函数上的方法称为工具方法
+			//  工具方法
+			// $.type() 判断参数的数据类型
+			// $.trim() 去除字符串首尾的空格     例如var str = "  d12  "  console.log($.trim(str));
+			// $.proxy() 用于改变this指向  第一个参数填function(需要被改变this的函数)
+			//                            第二个参数填object对象(this指向的对象)
+			//                            第三,四,五.....参数 (为 要改变this指向的函数的参数)
+			// 例如: 
+			//------------------------------------------------------------------>
+			// function fn(a, b){   // 定义需要改变this指向函数
+			// 	console.log(this); // 打印未改变this指向为window
+			// 	console.log(a, b)  //  打印当前 参数
+			// }
+			// fn(1, 2);  //执行
+			// var obj = {  // 定义改变this对象
+			// 	a : "a"
+			// }
+			// var fnObj = $.proxy(fn, obj);  // 用jQuery方法proxy()改变fn函数this指向为obj返回全新函数fnObj;
+			// 							   //(fn参数也可以写在Proxy()的参数的第三位和第四位) || 
+											//例如 :var fnObj = $.proxy(fn, obj, 3, 4);(珂理化)   fnObj();
+											//例如 :var fnObj = $.proxy(fn, obj, 3);(珂理化)   fnObj(4);
+			// fnObj(3, 4);    // 改变this指向函数执行, 并且传参
+			//---------------------------------------------------------------------------------
+			// $.noConflict()  防止$使用冲突   
+		    // $.noConflict() 例如: var wQuery= $.noConflict()  console.log(wQuery("div")); 现在$已经不好使，他的权限移交到wQuery上
+			// .parseJSON()   把字符转换为json模式,外双内单(严格)内部属性为双引号不需要回车符
+			// 例如:
+			//-------------------------------------------------------------->
+			// var obj = {
+			// 	"aa" : 123,
+			// 	"bb" : "dg"
+			// 	}
+			// var str = JSON.stringify(obj)   //转换为字符模式
+			// console.log($.parseJSON(str)) // 把json字符转换为对象
+			//----------------------------------------------------------------------------
+			// $.makeArray() 把类数组转换为数组  例如: var arr = $.makeArray(类数组);
+			//  jQuery 高级
+			// $.extend   创建合并
+			//----------------------------------------------------------------------------->
+			// $.extend()   (1)用于自己创建jQuery方法   (2)可以合并对象  						   (工具方法)
+			// $.fn.extend()   用于自己创建操作dom的jQuery方法,与$.extend()相同在原型上创建方法   (实例方法)
+			// $.fn === $.prototype     指向同一空间,觉得prototype太长，用fn代替
+			// 例如: 用于自己创建jQuery方法(1)
+			// $.extend({     // jQuery 方法
+			// 	leftTrim: function(str){  // 参数填对象 ,对象中创建函数成为jQ工具方法(删除左侧空格)
+			// 		var reg = /^\s+/g;   // 正则匹配左侧空格
+			// 		return str.replace(reg, "")  // 函数执行 替换左侧空格
+			// 	}
+			// })
+			// console.log($.leftTrim("   wwz")) // 应用自己创建的jQuery工具方法
+			// 例如: 可以合并对象(2)
+			// var obj1 = {a:{aa: 1},num: 1}
+			// var obj2 = {a2:{aaa: 2},num: 2}
+			// $.extend(obj1, obj2)   // 把obj1和obj2 两个对象合并到obj1中(如果有同样属性会覆盖掉)(对象浅拷贝对象指向同一空间)
+			// $.extend(true, obj1, obj2)   //  对象深拷贝 (复制过后两个对象不指向同空间)
+			// $.fn.extend(true, obj1, obj2)   //  对象深拷贝 (复制过后两个对象不指向同空间)
+			
+			//  extend总结: 无论是创建方法还是合并对象,其实都是在合并对象，只是被合并的对象不同
+			// 				创建方法只是把对象中的方法合并到  $ 或 $.prototpe中
+			//              合并对象只是合并到第一个参数对象; 
+			//--------------------------------------------------------------------------------------
+			// $.Callbacks  回调函数 
+			//----------------------------------------------------------------------------------->
+			// function fn1(){console.log("fn1")} //创建函数
+			// function fn2(){console.log("fn2"); return false}
+			// function fn3(){console.log("fn3")}
+			// var callBack = $.Callbacks(); //创建回调函数引用 并赋值给callBack
+			// 			// $.Callbacks("once")  参数填"once"   只能执行一次回调(只能使用一次callBack.fire())
+			// 			// $.Callbacks("unique")  参数填"unique"  不能重复add同一函数(不能callBack.add(fn1, fn1, fn1))只能执行一次fn1
+			// 			// $.Callbacks("memory")  参数填"memory"  即使callBack.fire(顺序执行过后) 后面写callBack.add(fn2)也会继续被执行
+			// 			// $.Callbacks("stopOnFalse")  参数填"stopOnFalse"  如果被添加add中的函数有函数结尾有写return false 后续函数不继续执行;
+			// 			// $.Callbacks("stopOnFalse once unique")  可以同时添加多个限制参数
+			// callBack.add(fn1, fn2, fn3)   // 使用回调函数方法add 添加函数
+			// callBack.fire();    // 使用回调方法fire  顺序执行add添加的函数
+			// callBack.fire();
+			//----------------------------------------------------------------------------------------------
+			// $.Deferred  延迟对象，相当于有状态的callback()
+			//--------------------------------------------------------------------------------->
+			// function demo(){   // 创建普通函数添加延迟对象
+			//     var dtd = $.Deferred();   // 创建延迟对象
+			// 		 dtd.resolve()   //成功延迟对象
+			//     //dtd.reject()    //失败延迟对象
+			//     //dtd.notify()    //进行中延迟对象
+			// 	
+			// 	   return dtd.promise()  //返回的是只读的延迟对象(外界无法改变状态)
+			//    
+			//   // 注意:函数执行(模拟网络请求)只有两种状态 要么成功  要么失败,所以在函数响应状态时(会延迟 500毫秒)
+			//   // 进行中(notify) 可以改变他的延迟状态,resolve或者reject还可以改变一个
+			//   // 当dtd.的状态已经是resolve或者reject,就无法改变状态了
+			// } 
+			// demo()  // 执行函数
+			// 
+			// // 判断函数状态执行 对应回调函数: dtd.done(func) 成功状态执行func
+			// //                              dtd.fail(func) 失败状态执行func
+			// //								dtd.progress(func)  进行中状态执行func
+			// 
+			// var dfree = demo();  // 把dtd延迟对象存到dfree
+			// dfree //延迟对象开始添加所对应的函数
+			// .done(function() {  //成功
+			// 	console.log("ok")
+			// })
+			// .fail(function() {  //失败
+			// 	console.log("error")
+			// })
+			// .progress(function() {  // 进行中
+			// 	console.log("doing")
+			// })
+			//---------------------------------------------------------------
+			// $.when()   返回的是延迟对象
+			// $.when()   参数也是延迟对象
+			// 例如: 
+			//---------------------------------------------------------->
+			// $.when(dfree1, dfree2)
+			// .done(function() {  //成功
+			// 	console.log("ok")
+			// })
+			// .fail(function() {  //失败
+			
+			
+			// 	console.log("error")
+			// })
+			// .progress(function() {  // 进行中
+			// 	console.log("doing")
+			// })
+			
+			//  总结:当dfree1和dfree2的状态全部都是成功状态(resolve)的时候才会执行成功函数(done)
+			//  如果dfree1 或 dfree2 有一个状态为 失败(reject)  最终执行都为失败 执行(fail)
+			//------------------------------------------------------------
+			// jQuery 源码分析 (了解jQuery构建思路)  || 查看下面笔记注释要把jQuery文件注释
+			//------------------------------------------------------------------>
+			// (function (global, factory){   // 立即执行函数构造封闭作用域
+			//  
+			// 	"use strict"     // 开启严格模式
+			// 	
+			// 	factory(global);   // 第二参数执行
+			// 	
+			// })(typeof window !== "undefined" ? window : this, function(windows) {
+			// 	// 参数一: 因为开启严格模式 作用域中的this指向undefined(改为window),参数二: 为函数整体调用
+			// 	windows.jQuery = windows.$ = jQuery
+			// 	
+			// 	function jQuery(selector){    // 创建jQuery 构造函数
+			// 	
+			// 		return new jQuery.prototype.init(selector);   // 执行函数返回 原型对象
+			// 	}
+			// 	jQuery.prototype = {       // 在jQuery构造函数 原型上创建函数
+			// 	
+			// 		init: function (selector){
+			// 			var dom = document.getElementById(selector);
+			// 			
+			// 			this[0] = dom;
+			// 			
+			// 			this.length = 1;
+			// 		},
+			// 		css: function (){
+			// 			console.log("css")
+			// 			return this       // return this 构成链式调用方法
+			// 		},
+			// 		html: function (){
+			// 			console.log("html")
+			// 			return this       // return this 构成链式调用方法
+			// 		}
+			// 	}
+			// 	jQuery.prototype.init.prototype = jQuery.prototype   // 构造函数返回的原型对象(init)
+			// 														 //没有jQuery的原型方法(赋值让jQuery方法也成为init的方法)
+			// })
+			// 
+			// $("temp").css().html()    // 开始调用
+			// 模块化 if(匹配 $( 被匹配 )  )   ||   jquery 源码
+			//
+			// var obj1 = {0: "1", 1: "c", length: 2}
+			// var arr = [0,1,2]
+			// jQuery.merge(obj1, arr)  // 用于 类数组 和 数组 合并并且返回到obj1中
+			// jQuery.parseHTML("<li>1223</li>", document, true)  参数一:被创建标签  参数二:在document 作用域下  参数三: 支持不支持创建script标签:true支持:false:不支持 || 返回数组 [li,script]
+			// var arr = jQuery.parseHTML(..,..,..)  // 返回已经创建dom的数组
+			// sizzle  强大的查询dom的js   jQuery中前2000+行都是 sizzle
+			// jquery  查找dom init 模块
+			//--------------------------------------------------------------------------------->
+			// var rootjQuery,
+			// 
+			// 	// A simple way to check for HTML strings
+			// 	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+			// 	// Strict HTML recognition (#11290: must start with <)
+			// 	// Shortcut simple #id case for speed
+			// 	rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]+))$/,
+			// 	
+			// 	// jQuery init 模块，用于判断过滤 $("参数")  参数
+			// 	init = jQuery.fn.init = function( selector, context, root ) {
+			// 		// 定义变量
+			// 		var match, elem;
+			// 		
+			// 		// HANDLE: $(""), $(null), $(undefined), $(false)
+			// 		// 判断 参数 是否为   $(""), $(null), $(undefined), $(false)
+			// 		if ( !selector ) {
+			// 			// 如果 以上值为false 返回空 jQuery对象
+			// 			return this;
+			// 		}
+			// 
+			// 		// Method init() accepts an alternate rootjQuery
+			// 		// so migrate can support jQuery.sub (gh-2101)
+			// 		// 可以传参， 如果有root 使用root ，没有root为 赋值 $(document)
+			// 		root = root || rootjQuery;
+			// 	
+			// 		// Handle HTML strings
+			// 		if ( typeof selector === "string" ) {
+			// 		// 如果 输入参数为字符类型 类似：
+			// 		// $("div"), $("<li></li>") $("<li>dawd") $("li:even/odd")
+			// 		// $(".active") $("#demo")  $("li:eq(0)") $("<li>", {html: 123})
+			// 			if ( selector[ 0 ] === "<" &&
+			// 				selector[ selector.length - 1 ] === ">" &&
+			// 				selector.length >= 3 ) {
+			// 		// 判断 字符串中第一个符为"<" + 3个以上字符 + 最后一个字符为 ">"的字符 ：
+			// 		// 类似：  $("<li></li>")  $("<li>", {html: 123})  (创建标签)
+			// 				// Assume that strings that start and end with <> are HTML and skip the regex check
+			// 				match = [ null, selector, null ];
+			// 		//  把以上字符串  赋值给match 例如：[null, <li>, null]
+			// 			} else {
+			// 				// 不符合以上 左"<" + 字符3+ + 右">" 的进行正则匹配(rquickExpr)
+			// 				match = rquickExpr.exec( selector );
+			// 				// 正则匹配后: 两种结果
+			// 				// id创建: match = ["#demo", undefined, "demo"]
+			// 				// 正则匹配标签: match = ["<del>1414", "<del>", undefined];
+			// 			}
+			// 			
+			// 			// Match html or make sure no context is specified for #id
+			// 			// 判断 有没有match 同时
+			// 			// 判断 match 数组第二位 是否为false  (隐式：不为id情况下) 同时
+			// 			// 判断不为 执行期上下文的情况下
+			// 			if ( match && ( match[ 1 ] || !context ) ) {
+			// 			
+			// 				// HANDLE: $(html) -> $(array)
+			// 				// 进入 正则匹配标签情况下 match = ["<del>1414", "<del>", undefined];
+			// 				if ( match[ 1 ] ) {
+			// 					// 在 判断 context 是不是 jQuery 对象 ： 如果为jQuery 对象的话 context[0] 取原生dom  如果不是 jQuery对象 直接赋值
+			// 					context = context instanceof jQuery ? context[ 0 ] : context;
+			// 					
+			// 					// Option to run scripts is true for back-compat
+			// 					// Intentionally let the error be thrown if parseHTML is not present
+			// 					// 合并 jquery 创建标签类数组 和 数组match = ["<del>1414", "<del>", undefined];
+			// 					jQuery.merge( this, jQuery.parseHTML(
+			// 						match[ 1 ],
+			// 						context && context.nodeType ? context.ownerDocument || context : document,
+			// 						true
+			// 					) );
+			// 
+			// 					// HANDLE: $(html, props)
+			// 					// 判断 正则匹配标签 符不符合标签规则 同时
+			// 					// 判断 第二个参数 是否为 object
+			// 					if ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( context ) ) {
+			// 						// 上面判断是否为  $("<li>", {html: 123})的形式
+			// 						// 遍历第二个参数对象
+			// 						for ( match in context ) {
+			// 							
+			// 							// Properties of context are called as methods if possible
+			// 							if ( isFunction( this[ match ] ) ) {
+			// 								// 判断 jQuery 中有没有函数 名 与遍历参数属性名一样的
+			// 								// 如果有一样的 执行函数 并把遍历的属性值 当做参数 传入
+			// 								this[ match ]( context[ match ] );
+			//  
+			// 							// ...and oth+erwise set as attributes
+			// 							} else {
+			// 								// 如果jQuery 中没有函数名 与属性名相同的 当做dom属性 并且 把属性值当做dom属性值 例如： 
+			// 								// $("<li>", {wwz: "123"}) 转变为 ：-- >
+			// 								// -- >       <li wwz="123"></li>
+			// 								this.attr( match, context[ match ] );
+			// 							}
+			// 						}
+			// 					}
+			// 					
+			// 					// 返回 处理后的jQuery 对象
+			// 					return this;
+			// 					
+			// 				// HANDLE: $(#id)
+			// 				// 否则 为id创建: match = ["#demo", undefined, "demo"]
+			// 				} else {
+			// 					// 直接 获取id
+			// 					elem = document.getElementById( match[ 2 ] );
+			// 					// id存在的情况下
+			// 					if ( elem ) {
+			// 
+			// 						// Inject the element directly into the jQuery object
+			// 						// jquery的第0 位 为 id 标签
+			// 						this[ 0 ] = elem;
+			// 						// 长度为1  (类数组)
+			// 						this.length = 1;
+			// 					}
+			// 					// 返回出带 id 的jQuery对象
+			// 					return this;
+			// 				}
+			// 
+			// 			// HANDLE: $(expr, $(...))
+			// 			// 在如果 传了第二个参数 或者 为 jquery 对象
+			// 			} else if ( !context || context.jquery ) {
+			// 				// 在没传 第二个参数的情况下  
+			// 				// $(document).find(dom)
+			// 				return ( context || root ).find( selector );
+			// 
+			// 			// HANDLE: $(expr, context)
+			// 			// (which is just equivalent to: $(context).find(expr)
+			// 			} else {
+			// 				// 如果传参的情况下  在jquery 对象 中 查找原生dom
+			// 				return this.constructor( context ).find( selector );
+			// 			}
+			// 
+			// 		// HANDLE: $(DOMElement)
+			// 		// 为 标签的情况下
+			// 		} else if ( selector.nodeType ) {
+			// 			// jQuery [0]  = 这个标签
+			// 			this[ 0 ] = selector;
+			// 			// 长度为 0
+			// 			this.length = 1;
+			// 			// 返回出带标签的 jQuery 对象 
+			// 			return this;
+			// 
+			// 		// HANDLE: $(function)
+			// 		// Shortcut for document ready
+			// 		// 如果 传入参数为 函数的话 
+			// 		} else if ( isFunction( selector ) ) {
+			// 			// 有 ready 函数 用ready执行函数 （加载快）
+			// 			return root.ready !== undefined ?
+			// 				root.ready( selector ) :
+			// 				
+			// 				// Execute immediately if ready is not present
+			// 				// 没有 ready 函数 正常加载 
+			// 				selector( jQuery );
+			// 		}
+			// 		// 返回出    selector 与 this(jquery类数组)  合并的 类数组
+			// 		return jQuery.makeArray( selector, this );
+			// 		// selector   两个参数合并 并且 按照 第二参数(this)导出
+			// 	};
+			// 
+			// // Gxccive the init function the jQuery prototype for later instantiation
+			// init.prototype = jQuery.fn;
+			// 
+			// // Initialize central reference
+			// rootjQuery = jQuery( document );
+			//-------------------------------------------------------------------------
+			//----------------------------------------------------------------------------------------------
+			// var a = {};
+			// var obj = jQuery.extend(a, {age : a})
+			// console.log(a)
+			// var copy;
+			// JQery 源码解析 extend (查看解开注释)
+			//------------------------------------------------------------------------------------------------->
+			// jQuery.extend = jQuery.fn.extend = function() {
+			// 	// 定义变量
+			// 	var options, name, src, copy, copyIsArray, clone,
+			// 	// 默认  形参第一位赋值给 target
+			// 		target = arguments[ 0 ] || {},
+			// 	//  默认 i = 1
+			// 		i = 1,
+			// 	//  把 形参长度 赋值 （避免多次获取length，浪费性能）
+			// 		length = arguments.length,
+			// 	// 默认 deep 为false （用来判断，深拷贝，还是浅拷贝）
+			// 		deep = false;
+			// 
+			// 	// Handle a deep copy situation
+			// 	// 判断第一个参数 是否为 布尔值 ，如果为布尔值 把值赋给deep，并且target(被赋值对象，退给第二个参数，并且i+1)
+			// 	if ( typeof target === "boolean" ) {
+			// 		deep = target;
+			// 		//如果为布尔值 把值赋给deep，并且target(被赋值对象，退给第二个参数，并且i+1)
+			// 		//  Skip the boolean and the target
+			// 			target = arguments[ i ] || {};
+			// 		i++;
+			// 	}
+			// 	
+			// 	// Handle case when target is a string or something (possible in deep copy)
+			// 	// 如果经过上层判断后  target不是对象且不是函数的话，强制吧target改为空对象
+			// 	if ( typeof target !== "object" && !isFunction( target ) ) {
+			// 		target = {};
+			// 	}
+			// 	
+			// 	// Extend jQuery itself if only one argument is passed
+			// 	// 强大的jQuery逻辑，经过上面两层if筛选后  i q length == true 的都为要赋给jQuery上新方法的(要给jQuert加新方法的) target = this || this为jQuery
+			// 	// 而 i !== length   都为 合并对象的
+			// 	if ( i === length ) {
+			// 		target = this;
+			// 		i--;
+			// 	}	
+			//     // 上边 层层判断后  augument[i]  为第一个 要合并的对象|| 要合并到$的 i = 0；  要合并为对象的 i = 1;
+			// 	for ( ; i < length; i++ ) {
+			// 
+			// 		// Only deal with non-null/undefined values
+			// 		// 把自第一个 参数对象 到后面 所有参数对象 全部遍历赋给 options  并且 options 不是 空的情况下
+			// 		if ( ( options = arguments[ i ] ) != null ) {
+			// 			
+			// 			// Extend the base object
+			// 			// 遍历对象 进行 对象合并
+			// 			for ( name in options ) {
+			// 				// 遍历每个对象的每个属性 赋值给copy
+			// 				copy = options[ name ];
+			// 				
+			// 				// Prevent Object.prototype pollution
+			// 				// Prevent never-ending loop
+			// 				// 如果遍历 对象中 有属性名 和 主对象名 相同  并且  对象中 属性名 === "__proto__" 的话  跳出本次循环（避免死循环）
+			// 				if ( name === "__proto__" || target === copy ) {
+			// 					continue;
+			// 				}
+			// 				
+			// 				// Recurse if we're merging plain objects or arrays
+			// 				// 判断deep 为true还是false 进行深拷贝还是浅拷贝  同时
+			// 				// 判断 copy 存不存在 同时
+			// 				// 判断 遍历的 copy 中 有没有 对象{} 或者 数组[], (如果没有对象或数组直接进入下面的浅拷贝)，
+			// 				// (没有数组[]或对象{}不需要深拷贝) 同时
+			// 				// 如果 copy 为数组的话  copyIsArray = true
+			// 				if ( deep && copy && ( jQuery.isPlainObject( copy ) ||
+			// 					( copyIsArray = Array.isArray( copy ) ) ) ) {
+			// 					// 主对象赋值给src
+			// 					src = target[ name ];
+			// 					
+			// 					// Ensure proper type for the source value
+			// 					// 判断 copyIsArray ：如果 为true的话 copy 为数组 否则为对象 同时
+			// 					if ( copyIsArray && !Array.isArray( src ) ) {
+			// 						// copyIsArray  ： true 赋值为数组
+			// 						clone = [];
+			// 					} else if ( !copyIsArray && !jQuery.isPlainObject( src ) ) {
+			// 						// copyIsArray  ： flase 赋值为对象
+			// 						clone = {};
+			// 					} else {
+			// 						// 主对象 有 对象或者数组 直接赋值
+			// 						clone = src;
+			// 					}
+			// 					//判断之后  copyIsArray变为初始值（避免下次循环不进行判断）
+			// 					copyIsArray = false;
+			// 
+			// 					// Never move original objects, clone them
+			// 					// 递归 把剩余的对象中的对象继续深入遍历 赋值
+			// 					target[ name ] = jQuery.extend( deep, clone, copy );
+			// 
+			// 				// Don't bring in undefined values
+			// 				// 在 遍历对象后 copy 不为 空 的情况下
+			// 				} else if ( copy !== undefined ) {
+			// 					// 拷贝对象 复制到 主对象中(浅拷贝)
+			// 					target[ name ] = copy;
+			// 				}
+			// 			}
+			// 			
+			// 		}
+			// 	}
+			// 
+			// 	// Return the modified object
+			// 	// 最后 返回 被拷贝后的主对象
+			// 	return target;
+			// };
+			//----------------------------------------------------------------------------------------
+			// 查看你当前 JQuery 版本  console.log($().jQuery)
+			// console.log($("div").toArray())   // 把JQuery 类数组转换为数组
+			// console.log($("div").get(0)) // 把jQuery对象  转换成原生dom 参数填jQuery对象中dom的下标(如果填负数的话以此类推,-1取倒数第一个dom)(如果不填参数，相当于$("div").toArray());
+			// $("div").pushStack($("div:eq(1)"))  // 创建一个新的jQuery对象,把参数放入jquery的第一位(0下标),把$("div")放进prevObject(回退对象)中 (使用end()回退到初始dom)
+			// $.each使用的实例方法上的each  可以这样使用 : 如果某数组下标 返回false 直接跳出循环 (函数中直接 return false 循环直接跳出)
+			//---------------------------------------------------->
+			// var arr = ["a", "b", "c", "d"]
+			// $.each(arr, function(index, ele){
+			// 	console.log(ele)
+			// 	if(index == 2){
+			// 		return false;
+			// 	}
+			// })
+			//----------------------------------
+			// console.log($("div").eq("2"))   eq方法,参数可以填字符串
+			// zepto.js  (轻量级jquery) || 迷你版jquery  适用于移动端
+			// touch 模块  (touch.js)
+			// touch模块在zepto中, 基于zepto由又独立于zepto
+			// 独立的文件 touch.js
+			// 引用完zept后,再引入touch.js
+			// touch 中封装了许多方法 : swipe, swipeLeft, swipeRight, swipeUp, swipeDown
+			// doubleTap, tap,singleTap, longTap
+			
+			
+			// Ajax
+			
+			// form
+			// 请求  Method: GET , POST, DELECT等   
+			// GET 用于 获得数据
+			// DELECT  用于删除后台数据
+			// POST 用于 插入数据,传入后台数据
+			// action: (填地址) address
+			
+			// Ajax
+			// 用javascript 以异步的形式操作XML (现在操作的是json)
+			// 全拼Ajax (Asynchronous javascript and xml)
+			// 异步 : 两个js 同时加载 
+			// 同步 : 两个js 不能同时加载
+			// 模拟服务器  使用 wampserver   模拟服务器 数据
+			// wampserver  成功启动变绿后 点击 www目录 并且点击 www 文件中的文件至浏览器 ---->
+			// ------>  网址为(file:///D:/wampserver/wamp/www/demo.html--(本地文件) 改为
+			// 				(http://localhost/demo.html) || 成功变为服务器下的文件
+			
+			// ajax 使用步骤
+			// 1.需要 浏览器运行 ajax
+			// 2.需要穿件ajax 对象
+			// 3.使用ajax 对象 来发送请求,使用过滤数据
+			// ajax.open(method, url, true)
+			// method 请求方式(get, post, delect)   url(请求地址)  	true(true为异步请求，false为同步请求)
+			// 4.ajax.send()  请求发送出去
+			// 5.使用 onreadystatechange 事件监听 数据状态变化
+			// 6. status == 200
+			
+			// onreadystatechange(状态改变的事件触发器)
+			// readyState 对象状态(integer)
+			// readyState == 0  (未初始化，未调用send方法)
+			// readyState == 1  (读取中，已调用send(),正在发送请求)
+			// readyState == 2  (已读取，send方法执行已完成，接收到全部内容)
+			// readyState == 3  (交互中， 正在解析响应数据)
+			// readyState == 4  (完成， 解析响应完成)
+			// status (服务器返回的状态码)
+			// status == 404 (文件未找到)
+			// status == 200 ()
+			
+			// 开始实现Ajax 
+			//------------------------------------------------------------------------------------------------->
+			// ajaxFunc("GET", "js/index.json", "", showList, true);
+			// // 封装Ajax 函数
+			// function ajaxFunc(method, url, data, callback, flag) {
+			// 	var xhr = null;
+			// 	if(window.XMLHttpRequest){
+			// 		xhr = new XMLHttpRequest();
+			// 	}else{
+			// 		xhr = new ActiveXObject("Microsoft.XMLHttp");// 兼容浏览器
+			// 	}
+			// 	method = method.toUpperCase();
+			// 	if(method == "GET"){
+			// 		xhr.open("GET", url + "?" + data, flag);
+			// 		xhr.send();
+			// 	}else if (method == "POST") {
+			// 		xhr.open("POST", url, flag);
+			// 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded') //设置请求类型,post请求需要设置编码格式
+			// 		xhr.send(data);
+			// 	}
+			// 	xhr.onreadystatechange = function() {
+			// 		if(xhr.readyState == 4 && xhr.status == 200){
+			// 			callback(xhr.responseText)
+			// 			// console.log(xhr.responseText)
+			// 		}
+			// 	}
+			// }
+			// function showList(date){
+			// 	var obj = JSON.parse(date);
+			// 	console.log(obj)
+			// }
+			//---------------------------------------------------------------------------------------
+			
+			// 浏览器重要概念 ==> 同源策略(same-origin policy)
+			// 所谓指,域名, 协议, 端口相同, 不同源客户端脚本(javascript， actionScript)在没明确授权情况下,不能读写对方的资源
+			// 简单说: 就是 各个网站域名 不能随便 请求别的网站的数据,会受到 同源策略的限制 (用协议， 域名， 端口来区分是不是同一网站)
+			// 协议 : http: || https:   区别：加s的协议在http下加入了ssl层加密了信息(http安全版本)
+			// 域名 : www.*****.com
+			// 端口 : www.*********.com:443/    https默认端口 443    http默认端口 80   端口: 80/90/3000 
+			// 这里同源指的是: 是同协议, 同端口, 同域名
+			// 域名是倒着解析的 : --> .com --> baidu -- > www --> https  解析出IP地址发送到服务器
+			// 
+			// .com(商业机构)
+			// .net(从事互联网服务的机构)
+			// .org(非盈利性组织)
+			// .com.cn(国内商业机构)
+			// .net.cn(国内互联网机构);
+			// .org.cn(国内非盈利行组织)
+			// 裸域名类似(http://echengyun.com)没有www   不能取小名:不能变幻域名并指向同一ip地址,而www.echengyun.com || 可以 起别名  且指向同一ip地址
+			
+			// Ajax受同源策略的限制
+			// 请求(GET,POST,DELECT,HEAD,TRACE,OPTION)
+			// http 报文
+			// POST(请求方法)/ chapter17(请求URL)/user.html HTTP/1.1(HTTP协议及版本)
+			// 状态码
+			// 1XX   为信息 说明接到请求继续处理
+			// 2XX   为成功 成功的收到,理解, 接收  
+			// 3XX   重定向 为了完成请求需要进行另一部措施,直接重新到缓存浏览器资源,或是跳转其他页面
+			// 4XX   客户端错误 请求语法错误,不能完全符合要求
+			// 5XX   服务器错误 服务器无法完成明显有效的请求
+			// 常见状态码
+			// 成功状态码:
+			// 200 服务器成功返回内容
+			// 301 / 302  临时/ 重定向
+			// 304 资源未被修改过
+			// 失败状态码
+			// 404 请求内容不存在
+			// 500 服务器暂时不可用
+			// 请求方法 POST 和 GET 的区别 
+			// 常规理解
+			// 1.GET使用UTL 或 cookie 传参, 而POST 将数据放在 BODy 中 ？NAME='wwz'&age=18
+			// 2.GET的URL会有长度限制,POST可以传很多的数据
+			// 3. POST 比GET 安全
+			
+			// JSONP
+			// 因为Ajax 同源策略问题,所以需要获取数据,需要跨域
+			// 解决跨域问题的几种办法
+			// 1. Flash  (不常用)
+			// 2. 服务器代理中转 (先用ajax获取同源服务器下的后台文件，再用后台文件链接其他域名下 后台文件，实现服务器中转 || 因为两个服务器中不存在 同源策略)
+			// 3. JSONP
+			// 4. document.domain(针对于基础域名相同的情况下)
+			// bj.58.com    在脚本 中写 document.domain = "58.com";
+			// tj.58.com    在脚本 中写 document.domain = "58.com";
+			
+			// jsonp 原理
+			// web页面上用的<script> 引入 js文件时不受跨域的影响,不仅与script  ,凡是带src的标签都拥有跨域的能力例如 <img> <iframe> <script>
+			// 1. 拥有src属性的标签 都有跨域的能力
+			// 2. 我们把数据放到服务器上,并且数据为json格式(js可以轻松解析json)
+			// 3. 我们无法监控动态添加的 <script>是否加载完成,我们要做一些处理
+			// 4. 在本地的 script中  定义获取数据的函数, 如 function doJson() {};
+			// 5. 在src获取的时候 url后面添加 ?cb=doJson(服务端会根据cd对应的值在doJson函数  后面参数传参) 在服务端写:例如:  doJson({"name":"wwz"});实现异步加载
+			
+			// jQuery Ajax
+			// $.ajax({
+				// jquery Ajax函数中的属性
+				// 1. type: GET POST访问形式 
+				// 2. url  访问路径
+				// 3. data 传输数据
+				// 4. async:(true/false)  是否异步,false为同步,true为异步(默认为异步，基本都是异步执行可不写)
+				// 5. cache 是否缓存 (默认true)
+				// 6. datatype : 一般不用请求jsonp 可不写这个属性,如果请求为jsonp,url要改成jsonp路径 例如  datatype: "jsonp"
+				// 7. success ajax 成功返回并执行的函数(参数为返回数据)
+				// 8. error  ajax 失败返回的函数(参数为对象告知状态码，和错误)
+				// 9. context 回调函数作用域(不常用)
+				// 10. crossDomain: 同域请求为false, 跨域为true(与datatype矛盾，尽量不写，因为jsonp本身就是跨域)
+				// jsonp 的属性
+				// https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&sugsid=1465,21127,29568,29220,26350&wd=lol&pwd=a&cb=doJson
+				// 11. jsonp : 属性值为jsonp  URL中的返回  函数名称(例如上面的) &cd  ||   jsonp: "cd",
+				// 12. jsonpCallback: "cbs"  URL中的返回函数(例如上面的) =doJson ||   jsonpCallback: "doJson"(返回函数的参数为 返回的数据)
+				// 13. data : 属性值为要找的数据   URL上的数据名称 例如 上面链接的  &wd=lol ||  data : "wd=lol"
+				// 如果不写以上两个属性的话  开启 datatype: "jsonp" 需要在在url 上自行拼接 返回函数名和 返回函数 并且 执行success函数
+				// 写了以上两个属性 可以 不执行 success属性
+			//})
+			//
+			//  微信小程序
+			//  在微信 配置项目时候他的文件的全局里会有个json文件,用于引入所有文件(所有js，wxml，wxss，json)的名称必须一样,用于引入文件,类似html中的link,script
+			//  我们可以在 他的文件的全局下的json文件里,有个window对象 
+			//  组件化开发
+			//  html ==> wxml
+			//  css  ==> wxss
+			// <div></div>   ==>  <view hover-class="hover"></view>  也可以加class类名
+			// <span></span> ==>  <text></text>
+			// 	hover-class="hover"    对应 index.wxss中的 .hover{background: red;} 这个<view>标签属性 可以点击切换到这个类名样式
+			//  细节看 微信新开发者文档  https://developers.weixin.qq.com/miniprogram/dev/framework/
+			
+			
+			// Canvas
+			// https://codepen.io/  大型canvas  Demo库
+			
+			
+			
+			
+			
+			// ES6
+			// ES6 语法转换成 ES5 语法官网   babeljs.io
+			
+			// es6 块级作用域
+			// {  let a = 1  }   此时的 a 为 局部变量
+			// var oDiv = document.getElementsByClassName("content");
+			// for(var i = 0; i < oDiv.length; i++){
+			// 	(function (i){
+			// 		oDiv[i].onclick = function() {
+			// 			console.log(i)
+			// 		}
+			// 	}(i))
+			// }
+			// // 用es6语法转变为 == >
+			// for(let i = 0; i < oDiv.length; i++){
+			// 		oDiv[i].onclick = function() {
+			// 			console.log(i)
+			// 		}
+			// }
+			
+			// 用let 定义的每个变量都是 局部变量 ,互不干扰
+			// let 变脸声明 不像var 一样有变量提升  例如:
+			// console.log(a)
+			// let a = 1;
+			// 这样写会报错!!!!!!
+			
+			// 在局部作用域中 例如 {} | function () {} 用let a定义的变量会统治局部作用域的a,其他变量没被let定义的话,还是正常使用
+			//例如:
+			// var a = 1
+			// {
+			// 	console.log(a)
+			// 	let a = 2
+			// }
+			// 这样写会报错!!!!!!
+			
+			// es6 中不能重复声明变量
+			// 例如:
+			// let a = 1;
+			// let a = "c";
+			// console.log(a)
+			// 这样写会报错!!!!!!
+			
+			// es6 声明第二个  const 
+			// const 变量声明 拥有 let 的所有特点
+			// const 自身还有一些特点 例如 : ==>
+			// const 定义的值不可修改
+			// const a = 1;
+			// a = 2
+			// console.log(a)
+			// 这样写会报错!!!!!!
+			
+			// 如果 const a = {name: ["a", "b"]} 用const定义对象的话
+			//  不能改变地址 ,但是能改变对象   例如:
+			// var b = {}
+			// b.a = "c"
+			// const a = {name: ["a", "b"]};
+			// a = b
+			// console.log(a) // 报错
+			
+			// es6 数组解构赋值
+			// var a = 1; var b = 2; var c = 3;  也可以这样写
+			// var [a, b, c] = [1, 2, 3]
+			// console.log(a, b, c)//
+			// 也可复杂嵌套使用  // 可以用来 (后台数据提炼) 例如: ==>
+			// var [a,[b, [c, [d]]]] = [1, [2, [3, [4]]]]
+			// console.log(a, b, c, d)
+			// 解构失败undefined  -->  解构赋值右边的值少 var [a, b] = [1]
+			// 不完全解构  -->  解构赋值左边的值少 var [a, b] = [1, 2, 3]
+			// 如下解构会报错
+			// let[foo] = 1
+			// let[foo] = undefinde
+			// let[foo] = false
+			// let[foo] = NaN
+			// let[foo] = null
+			// let[foo] = {}
+			// 右面的不是数组 ,严格说右面的不可遍历的解构,无法 解构赋值
+			
+			// 默认赋值
+			// var [a = 1, b = 2, c = 3] = [null];
+			// console.log(a, b, c)
+			// 只有在对应右边的 数组完全 === undefined 才会进行默认求值,否则都会对应赋值
+			
+			// 惰性求值
+			// function val(){
+			// 	return "aaa"
+			// }
+			// let [a = val()] = [];
+			// console.log(a)
+			// 只有 在对应右边的值为 === undefinde才会默认赋值,执行val 进行赋值, 惰性赋值
+			// 解构赋值从左到右进行赋值
+			// var [a = b, b = 1] = []   console.log(a, b) // undefinde 1   ||  变量提升 b == undefinde == a
+			// let [a = b, b = 1] = []   console.log(a, b) // error    ||  let 定义的变量没有变量提升 ,直接报错 b is not defind
+			
+			// ES6 对象解构赋值
+			// var {a, b} = {a: 1,b: 2},
+			// console.log(a, b)
+			//-------------------------
+			// var obj = {
+			// 	a: "b",
+			// 	b: "c",
+			// 	c: "d"
+			// }
+			// var {a, b, c} = obj;
+			// console.log(a, b, c)
+			// 对象解构赋值 模式匹配
+			// var {foo: bar} = {foo: "aa"}
+			// console.log(bar) // aa
+			// console.log(foo) // error
+			//左边foo属性名 会找到 右边foo对应的 属性值并且赋值给bar
+			// 也可以 这样赋值
+			// var a   //提前声明
+			// ({a} = {a: 1});  // 然后解构赋值 || 如果单独 {a} = {a: 1} error 
+			// console.log(a)   //  会把 {a} 看成单独的 代码块而不是表达式
+			// 也可以 复杂数组 对象 混合解构
+			// var {name: x, age: [a, b, c]} = {name: "wwz", age: [18, 19, 20]};
+			// console.log(x, a, b, c)  // 可以用于后台 数据处理赋值
+			// 对象默认赋值
+			// var {a = 1, b = 2, c = 3} = {};
+			// console.log(a, b, c) // 只有在对应右边的a, b, c 对象完全 === undefined 才会进行默认求值,否则都会对应赋值
+			
+			// console.log(new String("hellow"))  //会把字符串"hellow"解构成类数组对象
+			// var {toString: str} = "hellow"   // 类数组对象里原型链上有 toString方法 
+			// console.log(str); //对应 str 变为原生toString函数
+			// var [a, b, c, d ,e] = "hellow";  //"hellow"解构成类数组对象 分给 a, b, c, d, e
+			// console.log(a, b, c, d, e) // h   e   l    l  o   w
+			
+			// 函数的解构赋值
+			// function fn([a, b] = [10, 20]){
+			// 	console.log(a, b);
+			// }
+			// fn();  // 如若不传参,参数默认等于 || 10, 20
+			// fn([1, 2]); // 传参后 盖掉 默认解构赋值 等于 || 1, 2
+			// 函数解构赋值 面试题
+			// 1
+			// function move({x = 0, y = 0} = {}){
+			// 	console.log({x, y})
+			// }
+			// move({x: 3,y: 8}); // 3 8
+			// move({x: 3});// 3 0
+			// move({}); // 0 0
+			// move();// 0 0
+			// // 2
+			// function deal({x, y} = {x: 0, y: 0}){
+			// 	console.log({x, y})
+			// }
+			// deal({x: 3,y: 8}); // 3 8
+			// deal({x: 3});// 3 undefinde
+			// deal({}); // undefinde undefinde
+			// deal();// 0 0
+			
+			// 解构赋值用途
+			// 解构赋值转换 两个 变量值的位置
+			// var [x, y] = [1, "aa"];
+			// [x, y] = [y, x]
+			// console.log(x, y) // "aa"  1 || 转换两个变量 值的位置
+			
+			// ES6 数组扩展
+			
+			// Array.from()  // 把类数组转换为数组 
+			//// 普通类数组转换数组
+			// var arrLike = {0:"aa", 1:"bb", 2:"cc",length: 3}
+			// var arr = Array.prototype.slice.call(arrLike);
+			// console.log(arr)
+			//// Es6 类数组转换数组
+			// var arr = Array.from(arrLike)
+			// console.log(arr)
+			// 也可以用来拷深贝数组
+			// var newArr = [1, 2, 3];
+			// var arr1 = Array.from(newArr);
+			// arr1[0] = 10;
+			// console.log(newArr, arr1)
+			
+			// Array.of()   创建数组 与  var arr = new Array() 相似
+			// 与var arr = new Array(10) 区别于 输入一个参数 给的是length
+			// 而 var arr = Array.of(10)  ==>  [10]  可以弥补自变量数组创建的缺点(无法创建长度为1的数组)
+			
+			// 数组的实例方法
+			// .copyWithin(target, start, end)
+			// 必须传入三个参数
+			// target : 从该位置开始替换
+			// start : 从该位置开始读取数据, 默认为0, 如果为负数, 表示倒数
+			// end : 从该位置前停止读取数据, 默认为0, 如果为负数, 表示倒数
+			// var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+			// arr.copyWithin(0, 3, 6) // [4, 5, 6, 4, 5, 6, 7, 8, 9]
+			// console.log(arr)
+			// 被覆盖内容：从 0 开始覆盖 覆盖 6 - 4位 (下标)
+			// 覆盖内容:  从下标第4 - 6位  (下标)
+			
+			// .find()
+			// var arr = [1, 10, 19]
+			// var num = arr.find(function(val, index, arr) {
+			// 	return val > 9  // 返回 arr 中每个每个值 大于 9 的 第一个 值
+			// })
+			// console.log(num)
+			// // .findIndex()
+			// var numIndex = arr.findIndex(function(val, index, arr) {
+			// 	return val > 9  // 返回 arr 中每个每个值 大于 9 的 第一个 值的索引
+			// })
+			// console.log(numIndex)
+			
+			// 课外补充 用于处理后台数据的  网站  ,存储类似jQuery 的js,  有许多处理后台数据的方法 
+			// underscorejs.org
+			
+			// 数组实例的填充方法 fill() 方法
+			// var arr = new Array(10);
+			// arr.fill(7)  // fill 一个参数时候可以 填充 数组的undefined的值
+			// console.log(arr) // [7,7,7,7,7,.............]
+			// fill() 方法也可以指定位置 替换
+			// arr.fill(7, 2, 4) 填充内容为7， 从第2位之后开始，填充到第4位之前  
+			
+			// .keys()  
+			// for(let index of ['a','b',["a"]].keys()){
+			// 	console.log(index)  // 配合for of 循环 打印出 数组的 下标
+			// }
+			
+			// .entries()
+			// for(let [index, val] of ['a','b','c'].entries()){
+			// 	console.log(index, val)  // 配合for of 循环和 解构赋值 打印出数组中的每个值和每个值的下标
+			// }
+			
+			// .valueOf()
+			// for(let elem of ['a','b','c'].valueOf()){
+			// 	console.log(elem)  // 配合for of 循环 打印出数组中的每个值
+			// }
+			
+			// .includes()  数组的实例方法
+			// var arr = ["a", 1, undefined, NaN];
+			// console.log(arr.includes(undefined))  // true
+			// console.log(arr.includes(NaN))  // true
+			// console.log(arr.includes("a"))  // true
+			// arr.includes(NaN)  可以判断数组是否有 includes参数的值, 有返回true, 无返回false(可以判断任何值包括NaN)
+			
+			// 可以当在字符串中 查找/  有返回true  无 返回/false
+			// let str = 'banner box'
+			// console.log(str.includes('bann'))
+			// 对象的扩展 ----->
+			
+			// 对象可以外部 赋值属性
+			// var box = "a";
+			// var obj = {
+			// 	box
+			// }
+			// console.log(obj) // obj{box: "a"}
+			
+			//  自创面试题
+			// var a = function () {
+			// 	console.log(a);
+			// }
+			// var obj = {a}
+			// a.a()
+			
+			// 也可以简写函数 字母
+			// var obj = {
+			// 	a () {
+			// 		console.log("aa");
+			// 	}
+			// }
+			// obj.a(); // aa
+			// console.log(obj) //obj{a:func..}
+			
+			// var prop = "name"
+			// var obj = {
+			// 	[prop] : 1    // [prop]  转换成 name
+			// //	["prop"] : 1  // ["prop"]  就转换不成 name,["这里可以" + "字符串拼接"];
+			// }
+			// console.log(obj) // obj{name: 1}
+			
+			// // 定义对象 加入函数比较便捷
+			// function tel(){}
+			// function box(){}
+			// var obj = {
+			// 	tel : tel,
+			// 	box : box
+			// }
+			// console.log(obj)
+			// // ----es6 可以简写成 --->
+			// var obj1 = {
+			// 	tel,
+			// 	box
+			// }
+			// console.log(obj1)
+			
+			// Object.is()
+			// ES5 判断两个值是否相等(舍弃(==) 和 (===)的缺点) || 更严格的判断两个值是否相等 例如（NaN == NaN) 
+			// console.log(Object.is(NaN,NaN)) // true  || 相等 返回true , 不相等返回 false, 
+			// console.log(Object.is(-0, +0)) // false
+			// console.log(Object.is(NaN, NaN)) // true
+			
+			// 对象合并   Object.assign()
+			// var target = {
+			// 	a : 1
+			// }
+			// var source = {
+			// 	b : {
+			// 		d : "a"
+			// 	}
+			// }
+			// var sources1 = {
+			// 	c : 3
+			// }
+			// Object.assign(target, source, sources1)
+			// source.b.d = 10
+			// console.log(target) // target{a:1,b: {d:10}, c:3} (浅拷贝)
+			
+			// var object = {
+			// 	a : {
+			// 		abc : 2
+			// 	}
+			// }
+			// function react(target) {
+			// 	var obj = Object.assign({}, target)
+			// 	obj.a.abc = 3
+			// 	console.log(object)
+			// }
+			// react(object)
+			
+			// Object.keys();
+			// var obj = {foo: "1", key: "a"}
+			// var keys = Object.keys(obj)
+			// console.log(keys) // ["foo", "key"] 返回对象的属性集合成数组
+			
+			// Object.values()
+			// var obj = {foo: "1", key: "a"}
+			// var keys = Object.values(obj)
+			// console.log(keys) // ["1", "a"] 返回对象的属性值集合成数组
+			
+			// Object.entries()
+			// var obj = {foo: "1", key: "a"}
+			// var keys = Object.entries(obj)
+			// console.log(keys) // ["1", "a"] 返回对象的属性值 和 属性名的集合二维数组
+			
+			// var obj1 = {a: 1};
+			// var obj2 = {b: 2};
+			// Object.setPrototypeOf(obj1, obj2);  // 把obj2 变为 obj1.__proto__ (obj1的原型)
+			// console.log(obj1.b)
+			/// ES6 获取 对象的原型
+			// console.log(Object.getPrototypeOf(obj2)) // 获取obj2的原型 (obj2.__proto__)
+			
+			// 扩展运算符
+			// var arr1 = [1, 2, 3]
+			// var arr2 = [2, 3, 4]
+			// var arr3 = [...arr1, ...arr2] // arr1.concat(arr2) 拼接数组
+			// console.log(arr3) // [1, 2, 3, 2, 3, 4]
+			// rest 操作符
+			// var [a, ...b] = [1, 2, 3] // ...for 之后循环后面两位结合成数组
+			// console.log(a, b) // 1, [2, 3]
+			
+			// var obj1 = {a : "a1"};
+			// var obj2 = {b : "b2"}
+			// var obj = {
+			// 	...obj1,
+			// 	...obj2
+			// } // ... 操作符也可以 拼接对象
+			// console.log(obj) // {a: "a1", b: "b2"}
+			// rest 运算符
+			// var {obj, ...foo} = {
+			// 	obj: 1,
+			// 	bar: 2,
+			// 	baz: 3
+			// }				// ... 运算符 把后两位结合成对象了
+			// console.log(obj, foo) // 1 {bar:2, baz: 3}
+			
+			// ES6 函数扩展
+			// function forArr(...arr){ // ...arr  使用扩展运算符把实参列表遍历为数组
+			// 	console.log(arr) // [1, 2, 3, 4, 5]
+			// }					// 把参数遍历成数组
+			// forArr(1, 2, 3 , 4, 5)
+			
+			// 函数默认赋值
+			// function foo(box = 20, baz = 10){
+			// 	console.log(box, baz)
+			// }
+			// foo(); // 如果不赋值 默认 取给的参数为 20  10
+			// foo("a", "b");// 如果给了参数   覆盖默认值 变为 a  b
+			// 箭头函数
+			// var add = (a, b) => a + b; // 只有一条输出语句的话 可以简写成这样 {}	function add(a, b) { return a + b; }
+			// var add = (a, b) => console.log(a + b); // 只有一条输出语句的话 可以简写成这样 function add(a, b) { console.log(a + b) }
+			// console.log(add(1, 2))
+			
+			// 练习  转化成简易的箭头函数
+			// function insert(value) {
+			// 	return {info : function (array) {
+			// 		return {
+			// 			after: function(afterValue) {
+			// 				Array.splice(array.indexOf(afterValue) + 1, 0, value);
+			// 				return array;
+			// 			}
+			// 		}
+			// 	}}
+			// }
+			// 装换成 ===== >
+			// var insert = (value) => ({info : (array) => ({
+			// 	after : (afterValue) => {
+			// 		array.splice(array.indexOf(afterValue) + 1, 0, value);
+			// 		return array;
+			// 	}})})	
+			// log(insert("a"))
+			
+			// 箭头 this 问题
+			// var a = 5
+			// var obj1 = {a: 10}
+			// function fn() {
+			// 	console.log(this.a)
+			// }
+			// fn.call(obj1) // 改变this指向 为obj1
+			// var b = fn.bind(obj1) // bind 返回 this 为 obj1的函数,这个函数无法改变this指向了
+			// b() // 10
+			
+			// var id = 10;
+			// function a() {
+			// 	// => 箭头函数继承自己父级作用域
+			// 	setTimeout(()=>{
+			// 		console.log(this.id)
+			// 	}, 100)
+			// }
+			// var obj = {id : 20}
+			// a()  // 未改变 this 为 window  所以 this.id 为 10
+			// a.call(obj) // 改变this 为 obj 所以 this.id 为 20
+			// 箭头函数 没有 augument ,没有实参列表
+			// 要实参列表的话  需要   用 rest 操作符来获取
+			// 箭头函数也无法 变为 构造函数 ,new 的话会报错
+			// 箭头函数 的 this指向自己的 父级作用域
+			
+			// ES6 Class
+			// 我们可以用class封装一个集合 构造函数
+			// 在 class 中封装的函数 保存到 prototype里面
+			// constructor 函数中的 属性 变为 构造对象中的 属性
+			// class human{
+			// 	constructor(name, sex) {  // 我们也可以给构造函数传参
+			// 	   this.name = name
+			// 		this.sex = sex
+			// 	}
+			// 	eat() {
+			// 		log("eat")
+			// 	}
+			// 	walk() {
+			// 		log("walk")
+			// 	}
+			// }
+			// var Human = new human("wwz", "male ");
+			// Human.eat()
+			// log(Human);
+			//--------------------------------------------------------->
+			// ES6 class构造 继承
+			// class Father{
+			// 	constructor() {
+			// 	    this.house = "myHouse"
+			// 	}
+			// 	// static 静态的定义函数,new 之后 调用不了show
+			// 	// 只能 Father.show()  这样调用
+			// 	// 相当于 普通构造函数 的  this.show = function (){}
+			// 	// 而不是静态创建函数 都是定义在 prototype 上的
+			// 	static show() {
+			// 		console.log("show")
+			// 	}
+			// 	drink() {
+			// 		console.log("drink")
+			// 	}
+			// }
+			// 
+			// // extends  继承自
+			// class Child extends Father{
+			// 	constructor() {
+			// 		super() // 用继承的 class 构造 他的constructor 没有this对象
+			// 				// 需要 用系统 的方法 super 来创建 this 对象
+			// 		this.age = 18;
+			// 	}
+			// 	static childShow(){
+			// 		// 静态函数 只能自己定义静态函数 继承
+			// 		// 静态 方法里面的super 指向  Father 的 this
+			// 		super.show()
+			// 	}
+			// 	eat() {
+			// 		// 这里的 super指向 Father的 原型
+			// 		super.drink()
+			// 		console.log("eat")
+			// 	}
+			// }
+			// var child1 = new Child()
+			// var father = new Father()
+			// console.log(child1.eat()) 
+			//// console.log(Father.show())
+			//// console.log(Child.show())
+			//--------------------------------------------------------------------
+			// get 取值   set 存值
+			// var obj = {
+			// 	a : 1,
+			// 	get a() {
+			// 	// get   取值函数 把obj.a拦截下来  换成自己的 return值
+			// 		return 10000000
+			// 	},
+			// 	set a(val){
+			// 	// set   存值函数 吧obj.a改变 的 值传入 val中 , 可以改变
+			// 		// val 值可以改变
+			// 		console.log(val)
+			// 	}
+			// }
+			// obj.a = 1000;
+			// console.log(obj)
+			// console.log(obj.a)
+			// ES6 get 取值   set 存值
+			// class Age{
+			// 	constructor() {
+			// 	    this.age = 10
+			// 	}
+			// 		// get   取值函数 把obj.a拦截下来  换成自己的 return值
+			// 	get age() {
+			// 		return 1000000
+			// 	}
+			// 	// set   存值函数 吧obj.a改变 的 值传入 val中 , 可以改变
+			// 	set age(newVal) {
+			// 		console.log(newVal)
+			// 	}
+			// }
+			// var age = new Age();
+			// console.log(age.age)
+			///------------------------------------------------------------------------
+			// Object.defineProperty(对象， 属性名， {系统定义的 属性值});
+			// var obj = {}
+			// Object.defineProperty(obj, "a", {
+			// 	value: 10,
+			// 	writable: false,  // 经过属性定义后 obj.a 不可改变 , 属性值填 true 可以改变属性值
+			//  enumerable: true  // 是否 可遍历  是 true  否 false
+			// 	get a() {
+			// 		return 10000;
+			// 	},
+			// 	set a(val) {
+			// 		console.log(val)
+			// 	}
+			// })
+			// console.log(obj)
+			// https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+			// 更多 查看上面 网址
+			
+			
+			
+			
+			
+			// Canvas
+			
+			// var canvas1 = document.getElementById('tempCanvas'); //获取cavas标签
+			
+			// var ctx1 = canvas1.getContext('2d');  // 获取 canvas的 上下文   (类似画笔工具库)
+			// var w = canvas1.width
+			// var h = canvas1.height
+			// 
+			
+			// ctx1.globalAlpha = 0.5
+			// ctx1.moveTo(100, 100)  // 起始点(从哪开始画)
+			// ctx1.lineTo(200, 100)  // 直线画到 X200, Y100
+			// ctx1.lineTo(200, 200) 
+			// ctx1.lineTo(100, 100)
+			// ctx1.closePath()  // 闭合路径 (起始点到终止点)
+			// ctx1.strokeStyle = 'green'  // 描边颜色  (同一路径只能有一个颜色)
+			// ctx1.fillStyle = 'red'  // 填充颜色      (同一路径只能有一个颜色)
+			// ctx1.lineWidth = 10  // 描边宽度
+			// ctx1.stroke()    // 描边
+			// ctx1.fill()  // 填充
+			 
+			// ctx1.beginPath() // 开启新的路径 (可以写出出新的的图像)
+ 		 	
+			// ctx1.moveTo(300, 100)  // 起始点(从哪开始画)
+			// ctx1.lineTo(400, 100)  // 直线画到 X200, Y100
+			// ctx1.lineTo(400, 200)  // 直线画到 X200, Y100
+			// ctx1.closePath()  // 闭合路径 (起始点到终止点)
+			// ctx1.strokeStyle = 'orange'  // 描边颜色  (同一路径只能有一个颜色)
+			// ctx1.fillStyle = 'purple'  // 填充颜色      (同一路径只能有一个颜色)
+			// ctx1.lineWidth = 10  // 描边宽度
+			// ctx1.stroke()    // 描边
+			// ctx1.fill()  // 填充
+			
+			// ctx1.rect(起始点X, 起始点Y, 宽, 高)  // 绘制矩形
+			// ctx1.rect(150, 100, 200, 200)
+			// ctx1.fill()
+			
+			// ctx1.fillRect(150, 150, 200, 200) // 填充并且画矩形(新路径不用beginPath)
+			// ctx1.strokeRect(150, 350, 200, 200) // 描边并且画矩形(新路径不用beginPath)
+			
+			// ctx1.clearRect(x, y, w, h)  // 矩形擦除画布
+			
+			
+			// canvas中简单的矩形落地动画
+			// var upRect = 0 ;
+			// var timer =  
+			// setInterval(function(){
+			// 	
+			// 	ctx1.clearRect(0, 0, w, h)
+			// 	ctx1.fillStyle = 'red'
+			// 	ctx1.fillRect(0,upRect, 30, 30)
+			// 	upRect += 10;
+			// 	if(upRect > 470){
+			// 		 clearInterval(timer)
+			// 	}
+			// 	
+			// }, 60)
+			
+			
+			// canvas 化弧形
+			// https://www.w3school.com.cn/tags/canvas_arc.asp
+			// ctx1.arc(x, y, 半径, 起始弧度, 结束弧度, 弧度方向)
+			// 角以弧度计, 0顺时针 1逆时针
+			// ctx1.arc(250, 250, 100,Math.PI, Math.PI/2, 1)
+			// ctx1.stroke()
+			
+			// 圆角
+			// ctx1.moveTo(200, 200)
+			// // ctx1.arcTo(起始点x,起始点y, 结束点x, 结束点y, radius(圆的弧度))
+			// 
+			// ctx1.arcTo(250, 200, 250, 250, 30)
+			// ctx1.arcTo(250, 300, 150, 300, 30)
+			// ctx1.arcTo(150, 300, 150, 200, 30)
+			// ctx1.arcTo(150, 200, 200, 200, 30)
+			// ctx1.closePath()
+			// ctx1.stroke()
+			
+			// 贝塞尔曲线
+			// 二次贝塞尔曲线
+			// ctx1.moveTo(100, 250)
+			// ctx1.quadraticCurveTo(控制点x, 控制点y, 结束点x, 结束点y)
+			// ctx1.quadraticCurveTo(150, 100, 300, 200)
+			// ctx1.stroke()
+			
+			//三次贝塞尔曲线
+			// ctx1.moveTo(100, 250)
+			// ctx1.quadraticCurveTo(150, 100, 300, 400, 500, 0)
+			// ctx1.quadraticCurveTo(x1, y1, x2, y2, ex, ey)
+			// //x1,y1 x2,y2 控制点
+			// //ex, ey 结束点
+			// ctx1.stroke()
+			
+			// 坐标轴装换
+			// ctx1.translate(100, 100) // 平移整个画布(画布上的所有图形也平移)
+			// ctx1.scale(1, 1) // 缩放整个画布(画布上的所有图形也缩放)
+			// ctx1.scale(Math.PI) // 旋转   Math.PI 为 180deg  
+			
+			// ctx1.sava()  保存当前状态的画布到栈里
+			// ctx1.restore()  从栈里取出画布状态并应用 (覆盖当前画布状态)
+			
+			// ctx1.setTransform(a, b, c, d, e, f)  //先清空当前画布状态,在进行操作
+			// ctx1.transform(a, b, c, d, e, f)  // 在当前画布 状态基础上 进行操作
+			// // 参数: a水平缩放, b水平倾斜, c垂直倾斜, d垂直缩放, e水平移动, f垂直移动
+			
+			// 填充图片
+			// var oImg = new Image()
+			// oImg.src = 'image/1.jpg';
+			// 
+			// oImg.onload = function(){
+			// 	// ctx1.createPattern(图片对象|canvas|video(有图像的), 'repeat-x|repeat-y|repeat|no-repeat')
+			// 	ctxImg = ctx1.createPattern(oImg, 'no-repeat')
+			// 	ctx1.fillStyle = ctxImg
+			// 	ctx1.fillRect(0, 0, 300, 200)
+			// }
+			
+			
+			
+			// 渐变
+			// 线性渐变
+			// var bg = ctx1.createLinearGradient(起始点x, 起始点y, 结束点x, 结束点y)
+			// var bg = ctx1.createLinearGradient(0, 0, 0, h) // 创建渐变方向
+			// // bg.addColorStop(渐变进度, 颜色)
+			// bg.addColorStop(0, "red");
+			// bg.addColorStop(0.5, "yellow");
+			// bg.addColorStop(1, "orange");
+			// ctx1.fillStyle = bg
+			// ctx1.fillRect(0, 0, w, h)
+			
+			// 径向渐变
+			// var bg = ctx1.createRadialGradient(圆1w, 圆1h, 圆1r, 圆2w, 圆2h, 圆2r)
+			// var bg = ctx1.createRadialGradient(250, 250, 200, 250, 250, 100) // 创建渐变方向
+			// // bg.addColorStop(渐变进度, 颜色)
+			// bg.addColorStop(0, "#fff");
+			// bg.addColorStop(0.5, "#000");
+			// bg.addColorStop(1, "#fff");
+			// ctx1.fillStyle = bg
+			// ctx1.fillRect(0, 0, w, h)
+			
+			// canvas 阴影
+			// ctx1.shadowColor='red'   //阴影颜色
+			// ctx1.shadowOffsetX = 15  // 阴影偏移量X
+			// ctx1.shadowOffsetY = 15  // 阴影偏移量Y
+			// ctx.shadowBlur = 100 // 阴影模糊程度
+			
+			// canvas 文本
+			// ctx1.fillText('文本', 起始位置X, 起始位置Y) // 填充文字
+			// ctx1.storkeText('文本', 起始位置X, 起始位置Y) // 描边文字
+			// ctx1.fillStyle = 'red'  // 字体颜色
+			// ctx1.font = '50px sans-serif'  // 设置字体大小
+			// ctx1.textAlign = 'center'  // 水平方向(控制字体位置)   left|center|right
+			// ctx1.textBaseline = 'middle' // 垂直方向(控制字体位置) top|middle|bottom
+			// ctx1.fillText('wwzdawdawd', 250, 250)
+			
+			// 线段样式
+			// ctx1.lineWidth = 30
+			// ctx1.lineCap = 'round'  //  线段   属性：round 圆角线段| buff 默认线段| square 比默认宽一点
+			// ctx1.lineJoin = 'round'  //  形状   属性：round 圆角线段| miter 默认线段| bevel 图像折角
+			// // // ctx1.miterLimit = 10   当lineJoin的值为miter的时候 ,如果斜接长度超过limit值,变成 bevel折角
+			// // // 注:实际运算大于limit * lineWidth / 2的值, 了解即可
+			// ctx1.moveTo(100, 100);
+			// ctx1.lineTo(200, 100)
+			// ctx1.stroke()
+			
+			// 裁剪
+			// ctx1.beginPath()
+			// ctx1.arc(250, 250, 100, 0, Math.PI * 2, 0)
+			// ctx1.stroke()
+			// ctx1.closePath()
+			// ctx1.clip()  // 裁剪  当前路径外的区域不再绘制
+			// ctx1.fillRect(200, 250, 100, 100)
+			// // 如果 想在裁剪后 其他区域绘制
+			// // 可在使用clip方法前 sava ,后续通过restore方法会发当前 可绘制状态 
+			
+			// 合成图形
+			// ctx1.fillStyle = 'red'
+			// ctx1.fillRect(0, 0, w, h)
+			// 
+			// ctx1.globalCompositeOperation = 'destination-out' // 合成并剪切
+			// // 更多属性查看 https://www.w3school.com.cn/tags/canvas_globalcompositeoperation.asp
+			// 
+			// ctx1.beginPath()
+			// ctx1.fillStyle = 'green'
+			// ctx1.arc(250, 250, 50, 0, Math.PI * 2, 0)
+			// ctx1.fill()
+			
+			// 全局透明度  (作用所有子路径)
+			// ctx1.globalAlpha = 0.5
+			
+			
+			// 绘制图片
+			// var Img = new Image();
+			// Img.src = 'image/1.jpg'
+			// Img.onload = function() {
+			// 	// ctx1.drawImage(Img, 100, 100) // 三个参数时表示: 图片|canvas|video, 起始位置X, 起始位置Y
+			// 	// ctx1.drawImage(Img, 100, 100, 200, 100) // 五个参数时表示: 图片|canvas|video, 起始位置X, 起始位置Y, 图片宽W, 图片高H
+			// 	// ctx1.drawImage(Img, 100, 100, 50, 50, 225, 225, 50, 50) 
+			// 	// 九个参数时表示: 图片|canvas|video, 图片裁剪起始位置X, 图片裁剪起始位置Y, 裁剪图片宽W, 裁剪图片高H, 裁剪后放置点X, 裁剪后放置点Y, 裁剪后图片宽W, 裁剪后图片高H
+			// }
+			
+			// 将Canvas内容导出 (canvas绘制后 变为 base64 的图片导出)  同源策略,无法跨域
+			// ctx1.fillRect(225, 225, 50, 50)
+			// var data = canvas1.toDataURL()
+			// var dataImg = new Image();
+			// dataImg.src = data
+			// document.body.appendChild(dataImg)
+			
+			
+			// 获取canvas 每个像素信息
+			// ctx1.fillRect(0, 0, w, h)
+			// 
+			// var imgDataPX = 
+			// // ctx1.getImageData(0, 0, w, h);  // 参数: 起始点X, 起始点Y, 查找像素矩形宽, 查找像素矩形高 || 数值内矩形所有像素的 rgba 的数值
+			// // // ctx1.createImageData(w, h)  // 创建新的空白 imgdata 对象  (不常用)
+			// // // ctx1.putImageData(imgData, X, Y) // 将图像数据放回 画布上
+			// console.log(imgDataPX)
+			
+			// 命中检测
+			// ctx1.moveTo(100, 100)
+			// ctx1.lineTo(200, 100)
+			// ctx1.lineTo(200, 200)
+			// ctx1.closePath()
+			// ctx1.stroke()
+			// console.log(ctx1.isPointInPath(120, 120))  // 检测 输入参数: (x,y) 是否在形状区域内
+			// console.log(ctx1.isPointInStroke(100, 100))  // 检测 输入参数: (x,y) 是否在线上
+			// //注: 也可以查找像素的 的方式来判断 坐标是否在线上(getImageData 方法)
+			
+			// 不常用知识点  (非零绕数准则)   https://www.cnblogs.com/199316xu/p/6426440.html
+			
+			// (面试题)
+			// 如何解决canvas 高分屏幕模糊问题
+			// （自己理解 白话）在css 演示上缩小 ， 会让画布按比例缩小 (缩小之后，画布清晰),
+			//   canvas 标签上 width和 height 越大 css上width和 height 越小canvas清晰度越高， 
+			// canvas 中的 数值 x,y,w,h 全部参考的是  canvas 标签上的 width 和 height 的
+			
+			
+			// Vue 
+			// Vue Router 参照api https://router.vuejs.org/zh/
+			
+			
+			
+     	</script>
+</html>
+

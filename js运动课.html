@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.box{
+				width: 100px;
+				height: 100px;
+				background-color: orange;
+				position: absolute;
+				top: 0; left: 600px;
+			}
+			button{
+				margin-top: 150px;
+			}
+			span{
+				height: 100px;
+				width: 1px;
+				background: black;
+				position: absolute;
+				top: 0; left: 300px;
+			}
+			.wraper{
+				position: absolute; 
+				top: 300px; left: -300px;
+				width: 300px;
+				height: 50px;
+				background-color: orange;
+			}
+			.wraper .show{
+				position: absolute;
+				right: -30px; top: 0;
+				width: 30px;
+				height: 100%;
+				background-color: red;
+			}
+			.divOpa{
+				width: 100px;
+				height: 100px;
+				background-color: orange;
+				opacity: 0.8;
+			}
+			.box_div{
+				width: 100px;
+				height: 100px;
+				background-color: red;
+				margin-top: 80px;
+			}
+			.allObjStar{
+				width: 100px;
+				height: 100px;
+				background-color: red;
+				opacity: 1;
+				position: absolute;
+				right: 0; top: 0;
+			}
+			.top{
+				top: 100px;
+			}
+			.bottom{
+				top: 500px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box"></div>
+		<button type="button">run</button>
+		<span></span>
+		<div class="wraper">
+			<div class="show"></div>
+		</div>
+		<div class="divOpa"></div>
+		<div class="box_div"></div>
+		<div class="box_div"></div>
+		<div class="box_div"></div>
+		<div class="top allObjStar"></div>
+		<div class="bottom allObjStar"></div>
+	</body>
+	<script type="text/javascript">
+		var oDiv = document.getElementsByTagName("div")[0],
+		oBtn = document.getElementsByTagName("button")[0],
+		timer = null;
+		oBtn.onclick = function(obj){
+			startMove(oDiv, 300);
+		}
+		var oLine = document.getElementsByClassName("wraper")[0];
+		var oShow = document.getElementsByClassName("show")[0];
+		oLine.onmouseenter = function(){
+			startMove(this, 0)
+		}
+		oLine.onmouseleave = function(){
+			startMove(this, -300)
+		}
+		var oDivOpa = document.getElementsByClassName("divOpa")[0];
+		oDivOpa.onclick = function(){
+			floatMove(this, .5);
+		}
+		var oDivs = document.getElementsByClassName("box_div");
+		oDivs[0].onclick = function(){
+			allStartMove(this, 500, "width");
+		}
+		oDivs[1].onclick = function(){
+			allStartMove(this, 50, "opacity");
+		}
+		oDivs[2].onclick = function(){
+			allStartMove(this, 200, "height");
+		}
+		
+		
+		
+		var oAllObjDiv = document.getElementsByClassName("allObjStar")
+		var objCss = {
+			width : 400,
+			height : 400,
+			opacity : 50,
+			right : 200,
+			top : 150
+		}
+		//多物体多值链式运动框架
+		function allObjStartMove(obj, target, callBack){
+			clearInterval(obj.timer)
+			var iSpeed, iCur;
+			obj.timer = setInterval(function(){
+				var IcKey = true;
+				for(var attr in target){
+					if(attr == "opacity"){
+						iCur = parseFloat(getStyle(obj, attr)) * 100;
+					}else{
+						iCur = parseInt(getStyle(obj, attr));
+					}
+					iSpeed = (target[attr] - iCur) / 7;
+					iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+					if(attr == "opacity"){
+						obj.style[attr] = (iCur + iSpeed) / 100;
+					}else{
+						obj.style[attr] = iCur + iSpeed + "px";
+					}
+					if(iCur != target[attr]){
+						IcKey = false;
+					}
+				}
+				if(IcKey){
+					clearInterval(obj.timer)
+					typeof callBack == "function" ? callBack() : "";
+				}
+			},30)
+		}
+		oAllObjDiv[0].onclick = function(){
+			allObjStartMove(oAllObjDiv[0], objCss, function(){
+				allObjStartMove(oAllObjDiv[1], objCss)
+			})
+		}
+		
+		// 封装 方法  可以改变css属性变大变小速度
+		function allStartMove(obj, target, attr){
+			clearInterval(obj.timer)
+			var iSeep, iCur, timer = null;
+			obj.timer = setInterval(function(){
+				if(attr == "opacity"){
+					iCur = parseFloat(getStyle(obj, attr)) * 100;
+				}else{
+					iCur = parseInt(getStyle(obj, attr));
+				}
+				iSpeed = (target - iCur) / 7;
+				iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+				if(target == iCur){
+					clearInterval(obj.timer);
+				}else{
+					if(attr == "opacity"){
+						obj.style[attr] = (iCur + iSpeed) / 100
+					}else{
+						obj.style[attr] = iCur + iSpeed + "px"
+					}
+				}
+			},30)
+		}
+		// 小数值   速度变换
+		function floatMove(obj, target){
+			target *= 100
+			clearInterval(timer);
+			var iSpeed, iCur;
+			timer = setInterval(function(){
+				iCur = parseFloat(getStyle(obj, "opacity")) * 100;
+				iSpeed = (target - iCur) / 7;
+				iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+				if(iCur == target){
+					clearInterval(timer)
+				}else{
+					obj.style.opacity = (iCur + iSpeed) / 100;
+				}
+			},30)
+		}
+		//由快至慢
+		function startMove(obj, target){
+			clearInterval(timer)
+			timer = setInterval(function(){
+			var iSpeed = (target - obj.offsetLeft) / 7;
+			iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+			if(obj.offsetLeft === target){
+				clearInterval(timer)
+			}else{
+				obj.style.left = obj.offsetLeft + iSpeed + "px";
+			}
+			},30)
+		}
+		// 匀速
+		// function startMove(obj){
+		// 	clearInterval(timer)
+		// 	var iSpeed
+		// 	if(obj.offsetLeft > 300){
+		// 		iSpeed = -8
+		// 	}else{
+		// 		iSpeed = 8;
+		// 	}
+		// 	timer = setInterval(function(){
+		// 		if(Math.abs(300 - obj.offsetLeft) <= Math.abs(iSpeed)){
+		// 			clearInterval(timer)
+		// 			obj.style.left = 300 + "px";
+		// 		}else{
+		// 			obj.style.left = obj.offsetLeft + iSpeed + "px"
+		// 		}
+		// 	},30)
+		// }
+		// 获取样式方法
+		function getStyle(elem, prop){
+			if(window.getComputedStyle){
+				return window.getComputedStyle(elem, null)[prop];
+			}else{
+				return elem.currentStyle[prop];
+			}
+		}
+	</script>
+</html>

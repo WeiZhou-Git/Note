@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>模块化</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// 模块要有几个特点： 独立、完整、依赖关系
+
+			// 我们现在的简单模块化
+			
+			// 1.函数
+			// function add(a, b){
+			// 	return a + b;
+			// }
+			// function a(str){
+			// 	console.log(str);
+			// }
+			
+			// 2.对象
+			// var obj = {
+			// 	len: 3,
+			// 	init: function(){
+			// 		console.log("myFunc");
+			// 	},
+			// 	cteaFunc: function(){
+			// 		var a = function(){}
+			// 	}
+			// }
+			
+			// 3. 立即执行函数(实现私优化变量)
+			// (function(){
+			// 	var a = 1;
+			// 	function add(){
+			// 		console.log(a)
+			// 	}
+			// }())
+			
+			// 4.依赖(jq 思想编程)
+			// (function(a, b){
+			// 	b(a)
+			// })(window, function(windows){
+			// 	
+			// 	windows.Jquery = Jquery;
+			// 	function Jquery(){
+			// 		console.log(Jquery)
+			// 	}
+			// })
+			
+			// 封闭式为对象添加函数
+			// var module1 = (function(m){
+			// 	var m = m || {}
+			// 	
+			// 	m.add = function(a, b){
+			// 		return a + b;
+			// 	}
+			// 	return m;
+			// })(module1)
+			// console.log(module1)
+		</script>
+	</body>
+</html>

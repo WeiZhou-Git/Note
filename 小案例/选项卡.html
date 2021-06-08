@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>选项卡</title>
+		<style type="text/css">
+			.content{
+				width: 100px;
+				height: 100px;
+				border: 1px solid red;
+			}
+			.active{
+				background: yellow;
+			}
+		</style>
+	</head>
+	<body>
+		<button>111</button>
+		<button>222</button>
+		<button>333</button>
+		<div class="content">11111</div>
+		<div class="content">22222</div>
+		<div class="content">33333</div>
+	</body>
+	<script type="text/javascript">
+		var btn = document.getElementsByTagName("button");
+		var div = document.getElementsByClassName("content");
+		// for(var i = 0; i < btn.length; i++){
+		// 	(function(n){
+		// 		btn[n].onclick = function(){
+		// 			for(var j = 0; j < btn.length; j++){
+		// 				btn[j].className = ""
+		// 				div[j].style.display = "none";
+		// 			}
+		// 			this.className = "active"
+		// 			div[n].style.display = "block"
+		// 		}
+		// 	}(i))
+		// }
+		
+		
+		function divList(dom, btn){
+			for(var i = 0; i < btn.length; i++){
+				btn[i].sex = i;
+				btn[i].onclick = function(){
+					for(var j = 0; j < div.length; j++){
+						btn[j].className = ""
+						dom[j].style.display = "none"
+					}
+					dom[this.sex].style.display = "block"
+					this.className = "active";
+				}
+			}
+		}
+		divList(div, btn);
+	</script>
+</html>

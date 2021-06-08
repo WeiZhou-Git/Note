@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.linearSlow{
+				width: 100px;
+				height: 100px;
+				background-color: orange;
+				position: absolute; 
+				top: 0; left: 0;
+				border-radius: 50%;
+			}
+			.linearFast{
+				width: 100px;
+				height: 100px;
+				background-color: orange;
+				position: absolute; 
+				top: 0; right: 0;
+				border-radius: 50%;
+			}
+			span{
+				width: 100px;
+				height: 1px;
+				background-color: black;
+				position: absolute;
+				left: 0;
+				top: 300px;
+			}
+			ul{
+				padding: 0;
+				position: relative;
+				list-style: none;
+				width: 600px;
+				height: 100px;
+				margin: 150px auto;
+			}
+			ul li.nav{
+				overflow: hidden;
+				width: 148px;
+				height: 100%;
+				border: 1px solid #000;
+				float: left;
+				text-align: center;
+				line-height: 100px;
+			}
+			ul li.bg{
+				width: 150px;
+				height: 102px;
+				background-color: red;
+				opacity: .5;
+				position: absolute;
+				left: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 匀速变快 -->
+		<div class="linearSlow"></div>
+		<span></span>
+		<div class="linearFast"></div>
+		<ul>
+			<li class="nav">ES6</li>
+			<li class="nav">webPack</li>
+			<li class="nav">Vue</li>
+			<li class="nav">Node</li>
+			<li class="bg"></li>
+		</ul>
+	</body>
+	<script type="text/javascript">
+		var oDivSlow = document.getElementsByClassName("linearSlow")[0];
+		var oDivFast = document.getElementsByClassName("linearFast")[0];
+		oDivSlow.onclick = function(){
+			fastStartMove(this)
+		}
+		oDivFast.onclick = function(){
+			slowStartMove(this)
+		}
+		var oDivList = Array.prototype.slice.call(document.getElementsByClassName("nav"));
+		var oBg = document.getElementsByClassName("bg")[0];
+		oDivList.forEach(function(ele, index){
+			ele.onmouseenter = function(){
+				var myLeft = this.offsetLeft;
+				listStartMove(oBg, myLeft);
+			}
+		})
+		function listStartMove(obj, target){
+			clearInterval(obj.timer);
+			var iSpeed = 5, a, u = 0.9;
+			obj.timer = setInterval(function(){
+				a = (target - obj.offsetLeft) / 7
+				iSpeed = iSpeed + a;
+				iSpeed = iSpeed * u;
+				if(Math.abs(iSpeed) <= 1 && Math.abs(target - obj.offsetLeft) <= 1){
+					clearInterval(obj.timer);
+					obj.style.left = target + "px"
+				}else{
+					obj.style.left = obj.offsetLeft + iSpeed + "px"
+				}
+			},30)
+		}
+		<!-- 速度逐渐递减  小球运动效果 -->
+		function fastStartMove(obj){
+			clearInterval(obj.timer);
+			var iSpeed = 40, a, u = 0.9;
+			obj.timer = setInterval(function(){
+				a = (200 - obj.offsetTop) / 8
+				iSpeed = iSpeed + a;
+				iSpeed = iSpeed * u;
+				if(Math.abs(iSpeed) < 1 && Math.abs(200 - obj.offsetTop) < 1){
+					clearInterval(obj.timer);
+				}else{
+					obj.style.top = obj.offsetTop + iSpeed + "px"
+				}
+			},30)
+		}
+		// 逐渐加速运动
+		function slowStartMove(obj){
+			clearInterval(obj.timer);
+			var iSpeed = 0, a = 3;
+			obj.timer = setInterval(function(){
+				iSpeed = iSpeed + a;
+				obj.style.left = obj.offsetLeft + iSpeed + "px";
+			},30)
+		}
+		</script>
+</html>

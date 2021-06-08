@@ -1,0 +1,55 @@
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.wrapper{
+	width: 400px;
+	border: 1px solid #ccc;
+	margin: 100px auto;
+	border-radius: 4px;
+}
+.wrapper .search{
+	width: 90%;
+	height: 50px;
+	margin: auto;
+}
+.wrapper .search p{
+	display: inline-block;
+}
+.wrapper .search .inp{
+	padding: 10px 15px;
+	border-radius: 4px;
+	margin-top: 6px;
+	border: 1px solid #ccc;
+}
+.wrapper .search p span{
+	color: #38f;
+	padding: 3px 5px;
+	cursor: pointer;
+}
+.wrapper .search p .active{
+	background-color: #38f;
+	color: white;
+	border-radius: 4px;
+}
+.wrapper .user-list{
+	width: 100%;
+}
+.wrapper .user-list ul{
+	padding: 0 20px 0 20px;
+}
+.wrapper .user-list ul li{
+	position: relative;
+	border-bottom: 1px solid #ccc;
+	/* 上右下左 */
+	padding: 10px 0 10px 30px;
+}
+.wrapper .user-list ul li img{
+	width: 40px;
+	height: 40px;
+	position: absolute;
+}
+.wrapper .user-list ul li p{
+	margin-left: 50px;
+}

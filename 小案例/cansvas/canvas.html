@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>刮刮乐</title>
+		<style type="text/css">
+			*{padding: 0;margin: 0;}
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="300" height="200"></canvas>
+	</body>
+	<script type="text/javascript">
+		var myCanvas = document.getElementById('myCanvas'),
+			ctx = myCanvas.getContext('2d');
+			w = myCanvas.width,
+			h = myCanvas.height,
+			nowPoint = {},
+			lastPoint = {};
+			
+			function Init(){
+				var oImg = new Image();
+				oImg.src = '../../image/1.jpg'
+				oImg.onload = function(){ 
+					myCanvas.style.backgroundImage = 'url(../../image/1.jpg)'
+				}
+				
+				ctx.fillStyle = "#ccc"
+				ctx.fillRect(0, 0, w, h);
+				
+				ctx.globalCompositeOperation = 'destination-out'
+				
+				myCanvas.addEventListener('mousedown', downFun, false)
+			}
+			
+			function downFun(e){
+				lastPoint.x = e.clientX - myCanvas.offsetLeft,
+				lastPoint.y = e.clientY - myCanvas.offsetTop;
+				
+				myCanvas.addEventListener('mousemove', moveFun, false)
+				document.addEventListener('mouseup', upFun, false)
+			}
+			
+			function moveFun(e){
+				nowPoint.x = e.clientX - myCanvas.offsetLeft,
+				nowPoint.y = e.clientY - myCanvas.offsetTop;
+				
+				ctx.fillStyle = 'red'
+				
+				ctx.beginPath()
+				
+				ctx.lineWidth = 30
+				ctx.moveTo(lastPoint.x, lastPoint.y);
+				ctx.lineTo(nowPoint.x, nowPoint.y)
+				ctx.stroke()
+				
+				ctx.beginPath()
+				
+				ctx.arc(nowPoint.x, nowPoint.y, 15, 0, Math.PI * 2, 0)
+				ctx.fill()
+				ctx.closePath()
+				
+				lastPoint.x = nowPoint.x
+				lastPoint.y = nowPoint.y
+			}
+			
+			function upFun(){
+				 myCanvas.removeEventListener('mousemove', moveFun, false);
+				 document.removeEventListener('mouseup', upFun, false);
+				 clearCanvas()
+			}
+			
+			function clearCanvas(){
+				var dataCanvas = ctx.getImageData(0, 0, w, h),
+					len = dataCanvas.data.length,
+					c = 0;
+				
+				for(var i = 0; i < len; i += 4){
+					if(dataCanvas.data[i] == 0){
+						c++;
+					}
+				}
+				if(c > len/4 * 0.7){
+					ctx.clearRect(0, 0, w, h);
+				}
+			}
+			Init()
+	</script>
+</html>

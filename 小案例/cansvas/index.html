@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		#myFirCanvas{
+			border: 1px solid #000000;
+		}
+	</style>
+	<body>
+		<canvas id="myFirCanvas" width="500" height="500"></canvas>
+	</body>
+	<script type="text/javascript">
+		// 新建 canvas标签   (也可以叫做画布)
+		var myCanvas = document.getElementById("myFirCanvas");
+		// 新建canvas上下文对象  (也可以叫做画笔)  我们要做2d
+		var context = myCanvas.getContext("2d");    
+		// 从画布的什么位置开始(画笔的起始点)
+		// context.moveTo(100, 100);
+		// // 以线的方式 画到 x400, y400的位置
+		// context.lineTo(200, 200);
+		// context.lineTo(100, 200);
+		// // 描边宽度, 描边颜色, 填充颜色
+		// context.lineWidth = "10"
+		// context.strokeStyle = "green"
+		// context.fillStyle = "gray";
+		// // 连接起始点 和 终止点(闭合当前路径)
+		// context.closePath();
+		// // 描边
+		// context.stroke()
+		// // 填充
+		// context.fill()
+		// // 重点
+		// // 1. fill和stroke 方法都是作用在前的子路径
+		// // 2. 完成一条路径后要重新开始另一条路径时必须时候/必须使用beginPath()方法,betinPath开始子路径的一个新集合
+		// // 开辟新路径
+		// context.beginPath();
+		// context.moveTo(300, 100)
+		// context.lineTo(400, 200)
+		// context.lineTo(400, 100)
+		// context.lineWidth = "10"
+		// context.strokeStyle = "green"
+		// context.fillStyle = "red";
+		// context.closePath();
+		// context.stroke()
+		// context.fill()
+		// // 创建Canvas矩形
+		// // rect(X, Y, Width, height)
+		// 
+		// context.beginPath();
+		// context.lineWidth = "3"
+		// context.strokeStyle = "blueviolet"
+		// context.rect(100, 250, 100, 200)
+		// context.stroke()
+		// // 创建Canvas (并且能默认填充 且能自己开辟新路径)
+		// context.fillRect(250, 250, 100, 200)
+		// // 创建Canvas (并且能默认描边 且能自己开辟新路径)
+		// context.strokeRect(395, 250, 100, 200)
+		// // 擦除 某块区域
+		// // clearRect(X, Y, Width, Height)
+		// // context.clearRect(0, 0 , 150, 150)
+		// 
+		// 
+		// // canvas 绘制弧形
+		// // context.beginPath()
+		// // context.arc(X, Y, R(半径), Math.PI(180deg)/2, 0(顺时针)1(逆时针))
+		// // context.arc(200, 150, 50, 0, -Math.PI/2, 1)
+		// // context.stroke()
+		
+		// // 绘制圆角
+		// context.beginPath()
+		// // 绘制  圆角需要 moveTo辅助, 做起始点x,y
+		// context.moveTo(250, 250)
+		// // context.arcTo(x1, y1, x2, y2, 圆的半径)
+		// // 为起始点x1 x2 的为值  然后到 x2, y2的位置,用圆切开(抛弃拐角和多余的圆，形成圆角)
+		// context.arcTo(350, 250, 350, 350, 50)
+		// context.stroke()
+		
+		// // 利用圆角绘制矩形
+		// context.moveTo(250, 200)
+		// context.arcTo(350, 200, 350, 350, 30)
+		// context.arcTo(350, 350, 200, 350, 30)
+		// context.arcTo(200, 350, 200, 200, 30)
+		// context.arcTo(200, 200, 350, 200, 30)
+		// context.closePath()
+		// context.stroke()
+		
+		// 贝塞尔曲线
+		// context.quadraticCurveTo(X1, X1, ex, ey) 二次贝塞尔曲线
+		// 如果需要绘制 贝塞尔曲线  可以百度
+		// context.moveTo(100, 250)
+		// // 二次
+		// context.quadraticCurveTo(150, 100, 300, 200);
+		// context.moveTo(100, 250)
+		// // 三次
+		// context.quadraticCurveTo(150, 100, 400, 100, 50, 200);
+		// context.stroke()
+		
+		// 操作画布
+		// 平移画布	context.translate(X, Y)
+		// context.translate(100, 100)
+		//  缩放画布X, Y值 context.scale(X, Y)
+		// context.scale(1, 2)
+		// context.rotate(Math.PI/4)  || Math.PI === 180deg  // 旋转画布
+		// context.rotate(Math.PI/4)
+		// context.fillRect(0, 0, 100, 100)
+		// context.transform(a, b, c, d, e, f) 		(与setTransform区别： 在变化的基础之上再变化)
+		// 参数: 水平缩放, 水平倾斜, 垂直倾斜, 垂直缩放, 水平移动, 垂直移动
+		// context.setTransform(a, b, c, d, e, f)   (与transform区别： 先重置再变换)
+		// 参数: 水平缩放, 水平倾斜, 垂直倾斜, 垂直缩放, 水平移动, 垂直移动
+		// context.save 保存当前画布状态存入栈中
+		// context.restore() 取出上面第一个save状态释放,如果重复释放状态依次释放上面的save
+		
+		//(save, restore)例如 :
+		// context.save()
+		// context.translate(100, 100)
+		// // context.scale(2, 2)
+		// // context.rotate(Math.PI/4)
+		// // context.fillRect(0, 0, 100, 100)
+		// context.restore()
+		// context.fillRect(0, 0, 100, 100)
+		
+		// 填充图案
+		// createPattern(iamge, "repeat|repeat-x|repeat-y|no-repeat");
+		// 2. img元素, (Iamge对象), canvas元素, video元素(有图形的)
+		
+		// canvas 添加图片
+		// var img = document.createElement("img");
+		// img.src = "../相册touch/src/img/1.jpg"
+		// img.onload = function() {
+		// 	var fill = context.createPattern(img, "repeat-x");
+		// 	context.fillStyle = fill;
+		// 	context.fillRect(0, 0, 500, 500)
+		// }
+		
+		// 渐变
+		// context.createLinearGradient(X1, X2, Y1, Y2)
+		// 线性渐变
+		// var bg = context.createLinearGradient(0, 0, 0, 500);
+		// bg.addColorStop(0, "red");
+		// bg.addColorStop(.5, "yellow")
+		// bg.addColorStop(1, "blue")
+		// context.fillStyle = bg;
+		// context.fillRect(0, 0, 500, 500)
+		
+		// context.createLinearGradient(X1, Y1, r1, X2, Y2, r2)
+		// 径向渐变
+		// var bg = context.createRadialGradient(250, 250, 100, 250, 250, 200);
+		// bg.addColorStop(0, "#fff");
+		// bg.addColorStop(.5, "#000")
+		// bg.addColorStop(1, "#fff")
+		// context.fillStyle = bg;
+		// context.fillRect(0, 0, 500, 500)
+	</script>
+</html>

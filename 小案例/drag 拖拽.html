@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>drag</title>
+	</head>
+	<body>
+		<div style="width:200px;height:200px;background: red;position: absolute;top: 0;left: 0;"></div>
+		<div style="width:100px;height:100px;background: green;position: absolute;top: 0;left: 0;"></div>
+	</body>
+	<script type="text/javascript">
+		var divDrag = document.getElementsByTagName("div")[0];
+		var div = document.getElementsByTagName("div")[1];
+		function drag(elem){
+			elem.onmousedown = function(event){
+				var disX = event.pageX - parseInt(elem.style.left);
+				var disY = event.pageY - parseInt(elem.style.top);
+				document.onmousemove = function (event){
+					var event = event || window.event;
+					// 方块中心
+					// var divCenterX = event.pageX - parseInt(elem.offsetWidth/2) + "px"
+					// var divCenterY = event.pageY - parseInt(elem.offsetWidth/2) + "px"
+					// 点击方块任意位置
+					var divRodmX = event.pageX - disX + "px"   //成哥原理
+					var dYRodmY = event.pageY - disY + "px"
+					elem.style.left = divRodmX;
+					elem.style.top  = dYRodmY;
+				}
+				elem.onmouseup = function(){
+					document.onmousemove = undefined;
+				}
+			}
+		}
+		drag(divDrag)
+		drag(div)
+	</script>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.pageDiv{
+				width: 100px;
+				height: 100px;
+				background-color: orange;
+				position: absolute;
+				top: 0; left: 0;
+			}
+			.easeDiv{
+				width: 100px;
+				height: 100px;
+				background-color: red;
+				position: absolute;
+				top: 0; right: 0;
+				border-radius: 50%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="pageDiv"></div>
+		<div class="easeDiv"></div>
+	</body>
+	<script type="text/javascript">
+		var oPageDiv = document.getElementsByClassName("pageDiv")[0];
+		oPageDiv.onclick = function(){
+			startMove(this);
+		}
+		var oEaseDiV = document.getElementsByClassName("easeDiv")[0];
+		var lastX = oEaseDiV.offsetLeft;
+		var lastY = oEaseDiV.offsetTop; 
+		oEaseDiV.onmousedown = function(event){
+			clearInterval(oEaseDiV.timer)
+			var event = event || window.event;
+			var disX = event.clientX - this.offsetLeft;
+			var disY = event.clientY - this.offsetTop;
+			var iSpeed = 0, iSpeedY = 0;
+			document.onmousemove = function (event){
+				var event = event || window.event;
+				var newLeft = event.clientX - disX;
+				var newTop = event.clientY - disY;
+				iSpeedX = newLeft - lastX;
+				iSpeedY = newTop - lastY;
+				lastX = newLeft; 
+				lastY = newTop;
+				oEaseDiV.style.left = newLeft + "px";
+				oEaseDiV.style.top = newTop + "px";
+			}
+			document.onmouseup = function(){
+				document.onmousemove = null;
+				document.onmouseup = null;
+				easeStartMove(oEaseDiV, iSpeedX, iSpeedY)
+			}
+		}
+		// 引力方块弹跳
+		function easeStartMove(obj, iSpeedX, iSpeedY){
+			clearInterval(obj.timer);
+			var g = 6;
+			obj.timer = setInterval(function(){
+				iSpeedY += g;
+				var newLeft = iSpeedX + obj.offsetLeft;
+				var newTop = iSpeedY + obj.offsetTop;
+				if(newTop > document.documentElement.clientHeight - obj.offsetHeight){
+					iSpeedY *= -1;
+					newTop = document.documentElement.clientHeight - obj.offsetHeight;
+					iSpeedX *= 0.8;
+					iSpeedY *= 0.8;
+				}
+				if(newTop <= 0){
+					iSpeedY *= -1;
+					iSpeedX *= 0.8;
+					iSpeedY *= 0.8;
+					newTop = 0
+				}
+				if(newLeft > document.documentElement.clientWidth - obj.offsetWidth){
+					iSpeedX *= -1;
+					newLeft = document.documentElement.clientWidth - obj.offsetWidth;
+					iSpeedX *= 0.8;
+					iSpeedY *= 0.8;
+				}
+				if(newLeft <= 0){
+					iSpeedX *= -1;
+					iSpeedX *= 0.8;
+					iSpeedY *= 0.8;
+					newLeft = 0
+				}
+				if(Math.abs(iSpeedX) < 1){
+					iSpeedX = 0
+				}
+				if(Math.abs(iSpeedY) < 1){
+					iSpeedY = 0
+				}
+				if(iSpeedX == 0 &&
+				   iSpeedY == 0 &&
+				   newTop == document.documentElement.clientHeight - obj.offsetHeight){
+					   console.log("over");
+					   clearInterval(obj.timer)
+				   }
+				obj.style.left = newLeft + "px";
+				obj.style.top = newTop + "px";
+			},30)
+		}
+		// 方块碰撞
+		function startMove(obj){
+			clearInterval(obj.timer);
+			var iSpeedX = 6, iSpeedY = 8;
+			obj.timer = setInterval(function(){
+				var newLeft = iSpeedX + obj.offsetLeft;
+				var newTop = iSpeedY + obj.offsetTop;
+				if(newTop > document.documentElement.clientHeight - obj.offsetHeight){
+					iSpeedY *= -1;
+					newTop = document.documentElement.clientHeight - obj.offsetHeight;
+				}
+				if(newTop <= 0){
+					iSpeedY *= -1;
+				}
+				if(newLeft > document.documentElement.clientWidth - obj.offsetWidth){
+					iSpeedX *= -1;
+					newLeft = document.documentElement.clientWidth - obj.offsetWidth;
+				}
+				if(newLeft <= 0){
+					iSpeedX *= -1;
+				}
+				obj.style.left = newLeft + "px";
+				obj.style.top = newTop + "px";
+			},30)
+		}
+	</script>
+</html>

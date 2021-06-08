@@ -1,0 +1,131 @@
+*{
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	list-style: none;
+}
+.nav{
+	height: 28px;
+	width: 100%;
+	min-width: 950px;
+	background: #545652;
+	color: #5d5d5d;
+	font-size: 12px;
+}
+.nav a{
+	color: #fff;
+	line-height: 28px;
+	padding: 0 10px;
+}
+.top-nav-info{
+	float: right;
+}
+.down-load{
+	float: right;
+}
+.nav-list li {
+	float: left;
+}
+.nav-music{
+	width: 100%;
+	padding: 20px 0;
+	background-color: #F0F3EF;
+}
+.nav-music .nav-wrap{
+	width: 950px;
+	margin: 0 auto;
+}
+.nav-music .nav-wrap:after{
+	display: block;
+	content: "";
+	clear: both;
+}
+.nav-music .nav-login .nav-logo{
+	width: 150px;
+	height: 50px;
+}
+.nav-wrap .nav-logo a{
+	float: left;
+	width: 150px;
+	height: 50px;
+	display: block;
+	background: url(https://img3.doubanio.com/dae/accounts/resources/a4a38a5/music/assets/lg_music_a12_2.png?s=1) no-repeat;
+}
+.nav-music .nav-wrap .nav-search{
+	width: 455px;
+	height: 50px;
+	float: left;
+}
+.search{
+	 width: 416px;
+	 height: 30px;
+	 border-radius: 5px;
+	 border: none;
+	 padding-left: 5px;
+	 box-sizing: border-box;
+	 box-shadow: 0 1px 2px #CCCCCC;
+	 display: inline-block;
+	 float: left;
+	 outline: none;
+}
+.submit{
+	display: inline-block;
+	float: left;
+	width: 40px;
+	height: 31px;
+	border-radius: 0px 5px 5px 0;
+	background-color: #808080;
+	border: 0px;
+	margin-left: -5px;
+	outline: none;
+	background: url(https://img3.doubanio.com/dae/accounts/resources/a4a38a5/music/assets/nav_mu_bg.png?s=1) no-repeat 0 -40px;
+}
+.searchList{
+	width: 416px;
+	margin-top: 29px;
+	border: 1px solid #999999;
+	display: none;
+}
+.searchList:after{
+	display: block;
+	content: "";
+	clear: both;
+}
+.searchList>li{
+	width: 100%;
+	padding: 5px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border-bottom: 1px solid #000000;
+}
+.searchList>li:last-child{
+	border: none;
+}
+.searchList>li:hover{
+	background-color: #F5F5F5;
+}
+.searchList>li:after{
+	display: block;
+	content: "";
+	clear: both;
+}
+.searchList>li img{
+	width: 60px;
+	float: left;
+	box-sizing: border-box;
+}
+.searchTheme{
+	font-size: 13px;
+	color: #1A1AA6;
+	margin-left: 70px;
+}
+.searchTheme span{
+	font-size: 13px;
+	color: #808080;
+}
+.subTheme{
+	font-size: 12px;
+	color: #707070;
+	margin-top: 5px;
+	margin-left: 70px;
+}
