@@ -2,7 +2,10 @@
 
 #### 2022年 Start
 
-记录未来 10 年的工作以及技术
+#### 2022.4 导入笔记 并且开始编辑
+
+- 浅看下 Three.js
+- http://www.webgl3d.cn/Three.js/
 
 
 
